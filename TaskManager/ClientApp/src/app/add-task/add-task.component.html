@@ -1,0 +1,84 @@
+<!--sets formGroup to the form property in add-task.component.ts-->
+<form [formGroup]="form">
+  <div class="container d-grid gap-3" style="max-width: 700px;">
+
+    <div class="form-floating">
+      <!--formControlName="email" binds to formGroup 'form'-->
+      <!--blur fires when an element loses focus-->
+      <input class="form-control" formControlName="name" placeholder="Task Name" type="text" />
+      <label for="name">Task Name</label>
+
+          <div class="invalid-feedback d-block"
+              *ngIf="form.controls.name.invalid && (form.controls.name.dirty || form.controls.name.touched)">
+          <div *ngIf="form.controls.name.errors">
+            A task name is required
+          </div>
+        </div>
+
+    </div>
+
+    <div class="form-floating">
+      <input formControlName="description" class="form-control" type="text" id="description" placeholder="Description" />
+      <label class="form-label" for="description">Description</label>
+    </div>
+
+    <div class="d-grid gap-3">
+      <!--
+          <div class="form-floating">
+            <input formControlName="dueDate" class="form-control" id="dueDate" placeholder="Due Date" />
+            <label class="form-label" for="dueDate">Due Date</label>
+          </div>-->
+      <!--      <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Izaberite datum narudzbe"
+                   formControlName="deliveryDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>-->
+
+      <div class="form-floating">
+
+        <input formControlName="assignedFirstName" class="form-control" type="text" id="firstName" placeholder="First Name" />
+        <label class="form-label" for="assignedFirstName">First Name</label>
+
+        <!--        <div class="invalid-feedback d-block"
+               *ngIf="form.controls.firstName.invalid && (form.controls.firstName.dirty || form.controls.firstName.touched)">
+
+            <div *ngIf="form.controls.firstName.errors">
+              First name is invalid
+            </div>
+          </div>-->
+
+      </div>
+
+
+
+      <div class="form-floating">
+
+        <input formControlName="assignedLastName" placeholder="Last Name" class="form-control" id="lastName" type="text" />
+        <label class="form-label" for="assignedLastName">Last Name</label>
+
+        <!--        <div class="invalid-feedback d-block"
+               *ngIf="form.controls.lastName.invalid && (form.controls.lastName.dirty || form.controls.lastName.touched)">
+            <div *ngIf="form.controls.lastName.errors">
+              Last name is invalid
+            </div>
+
+          </div>-->
+
+      </div>
+
+      <div class="form-floating">
+        <input formControlName="priority" placeholder="Priority" class="form-control" id="priority" type="text" />
+        <label class="form-label" for="priority">Priority</label>
+      </div>
+
+
+    </div>
+    <div class="d-flex justify-content-center center">
+
+      <button (click)="addTask()" type="submit" class="btn btn-primary">Submit <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+</form>
+
