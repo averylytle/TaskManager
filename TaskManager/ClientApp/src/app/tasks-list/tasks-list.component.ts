@@ -5,7 +5,7 @@ import { TaskService } from './../api/services/task.service'
 import { CompletedTasksService } from './../api/services/completed-tasks.service'
 import { TasksDto, TasksRm } from '../api/models'
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialogModule } from "@angular/material";
+
 
 @Component({
   selector: 'app-tasks-list',
@@ -20,8 +20,7 @@ export class TasksListComponent implements OnInit {
 
   constructor(private taskService: TaskService,
     private completedService: CompletedTasksService,
-    private router: Router,
-    private matdialog: MatDialogModule
+    private router: Router
   ) {  }
 
   /*  taskForm = this.fb.group({

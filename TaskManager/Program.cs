@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddDbContext<Entities>(options =>
-	options.UseInMemoryDatabase(databaseName: "Tasks"),
+	options.UseInMemoryDatabase(databaseName: "TaskManager"),
 	ServiceLifetime.Singleton);
 
 builder.Services.AddControllersWithViews();
@@ -35,6 +35,7 @@ var app = builder.Build();
 
 var entities = app.Services.CreateScope().ServiceProvider.GetService<Entities>();
 
+
 Tasks[] tasksToSeed = new Tasks[]
 {
 	new ( Guid.NewGuid(),
@@ -42,6 +43,7 @@ Tasks[] tasksToSeed = new Tasks[]
 			"Complete all the azure training required",
 			"Avery",
 			"Lytle",
+			"avery@gmail.com",
 			"Low",
 			0
 			),
@@ -50,12 +52,51 @@ Tasks[] tasksToSeed = new Tasks[]
 			"Do all my house chores",
 			"Avery",
 			"Lytle",
+			"avery@gmail.com",
+			"Medium",
+			0
+			),
+		new ( Guid.NewGuid(),
+			"C# stuff",
+			"He's really good at C#!",
+			"John",
+			"Rajikannu",
+			"john@gmail.com",
 			"Medium",
 			0
 			)
 };
 
-entities.Tasks.AddRange(tasksToSeed);
+User[] users = new User[]
+{
+	new ("avery@gmail.com",
+		"Avery",
+		"Lytle"
+		),
+	new ("john@gmail.com",
+	    "John",
+		"Rajikannu")
+};
+	
+
+
+Project[] projectsToSeed = new Project[]
+{
+	new (Guid.NewGuid(),
+		"House Cleaning",
+		"All the cleaning I need to do for my house",
+		users,
+		tasksToSeed
+	),
+	new (Guid.NewGuid(),
+	"Empty Project",
+	"Project without any users or tasks assigned yet.",
+	null,
+	null)
+};
+
+//entities.Tasks.AddRange(tasksToSeed);
+entities.Projects.AddRange(projectsToSeed);
 
 entities.SaveChanges();
 

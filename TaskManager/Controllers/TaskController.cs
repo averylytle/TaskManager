@@ -19,7 +19,7 @@ namespace TaskManager.Controllers
 		//needed for dependency injection
 		private readonly Entities _entities;
 
-		public static Random random = new Random();
+		/*public static Random random = new Random();
 
 		static private IList<TasksRm> tasksRm = new List<TasksRm>
 		{
@@ -28,6 +28,7 @@ namespace TaskManager.Controllers
 			"Complete all the azure training required",
 			"Avery",
 			"Lytle",
+			"avery@gmail.com",
 			"Low",
 			0
 			),
@@ -36,10 +37,11 @@ namespace TaskManager.Controllers
 			"Do all my house chores",
 			"Avery",
 			"Lytle",
+			"avery@gmail.com",
 			"Medium",
 			0
 			)
-		};
+		};*/
 
 
 		public TaskController(ILogger<TaskController> logger, Entities entities)
@@ -66,6 +68,7 @@ namespace TaskManager.Controllers
 				task.Description,
 				task.AssignedFirstName,
 				task.AssignedLastName,
+				task.AssignedEmail,
 				task.Priority,
 				task.IsComplete));
 
@@ -117,6 +120,7 @@ namespace TaskManager.Controllers
 				dto.Description ?? "",
 				dto.AssignedFirstName ?? "",
 				dto.AssignedLastName ?? "",
+				dto.AssignedEmail ?? "",
 				dto.Priority ?? "",
 				dto.IsComplete));
 			}
@@ -130,23 +134,6 @@ namespace TaskManager.Controllers
 			_entities.SaveChanges();
 
 			return CreatedAtAction("Task Created", new { id = dto.TaskId });
-
-
-
-			/*DateTime localDate = DateTime.Now;
-
-			tasksRm.Add(new TasksRm(
-				dto.TaskId,
-				dto.Name,
-				dto.Description ?? "",
-				dto.AssignedFirstName ?? "",
-				dto.AssignedLastName ?? "",
-				dto.Priority ?? "",
-				dto.IsComplete
-				));
-
-			//Tasks.Add(dto);
-			return CreatedAtAction("Task added", new {id = dto.Name});*/
 
 		}
 

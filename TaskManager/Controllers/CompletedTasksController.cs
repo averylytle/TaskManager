@@ -31,6 +31,7 @@ namespace TaskManager.Controllers
 				task.Description,
 				task.AssignedFirstName,
 				task.AssignedLastName,
+				task.AssignedEmail,
 				task.Priority,
 				task.IsComplete));
 

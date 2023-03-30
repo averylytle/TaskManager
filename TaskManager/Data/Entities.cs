@@ -9,6 +9,7 @@ namespace TaskManager.Data
 		public DbSet<Tasks> Tasks => Set<Tasks>();
 
 		public DbSet<User> Users => Set<User>();
+		public DbSet<Project> Projects => Set<Project>();
 
 		public Entities(DbContextOptions<Entities> options) : base(options)
 		{
@@ -21,6 +22,8 @@ namespace TaskManager.Data
 			modelBuilder.Entity<Tasks>().HasKey(t => t.TaskId);
 
 			modelBuilder.Entity<User>().HasKey(p => p.Email);
+
+			modelBuilder.Entity<Project>().HasKey(p => p.ProjectId);
 		}
 
 	}

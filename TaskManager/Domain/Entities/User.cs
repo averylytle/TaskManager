@@ -2,7 +2,7 @@
 {
 	public class User
 	{
-		public string Email { get; set; }
+		public string Email { get; set; }//primary key
 		public string FirstName { get; set; } = string.Empty;
 		public string LastName { get; set; } = string.Empty;
 

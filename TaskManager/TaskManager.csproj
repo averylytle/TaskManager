@@ -28,7 +28,6 @@
   <ItemGroup>
     <Folder Include="ClientApp\src\app\id\" />
     <Folder Include="ClientApp\src\app\auth\" />
-    <Folder Include="Domain\Errors\" />
   </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
