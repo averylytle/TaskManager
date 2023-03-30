@@ -10,7 +10,8 @@ namespace TaskManager.Dtos
 		//DateTime DueDate,
 		string? AssignedFirstName,
 		string? AssignedLastName,
-		string? Priority
+		string? Priority,
+		byte IsComplete = 0
 		);
 }
 

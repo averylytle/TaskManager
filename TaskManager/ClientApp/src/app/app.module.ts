@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatNativeDateModule } from '@angular/material/core';
 import { RegisterUserComponent } from './register-user/register-user.component';
+import { EditTaskComponent } from './edit-task/edit-task.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { RegisterUserComponent } from './register-user/register-user.component';
     HomeComponent,
     TasksListComponent,
     AddTaskComponent,
-    RegisterUserComponent
+    RegisterUserComponent,
+    EditTaskComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

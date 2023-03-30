@@ -119,6 +119,59 @@ export class TaskService extends BaseService {
   }
 
   /**
+   * Path part for operation editTask
+   */
+  static readonly EditTaskPath = '/Task';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `editTask()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  editTask$Response(params?: {
+    body?: TasksDto
+  },
+  context?: HttpContext
+
+): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TaskService.EditTaskPath, 'put');
+    if (params) {
+      rb.body(params.body, 'application/*+json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*',
+      context: context
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `editTask$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  editTask(params?: {
+    body?: TasksDto
+  },
+  context?: HttpContext
+
+): Observable<void> {
+
+    return this.editTask$Response(params,context).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
    * Path part for operation addTaskTask
    */
   static readonly AddTaskTaskPath = '/Task';
@@ -172,24 +225,24 @@ export class TaskService extends BaseService {
   }
 
   /**
-   * Path part for operation deleteTask
+   * Path part for operation completeTask
    */
-  static readonly DeleteTaskPath = '/Task';
+  static readonly CompleteTaskPath = '/Task';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteTask()` instead.
+   * To access only the response body, use `completeTask()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteTask$Response(params?: {
+  completeTask$Response(params?: {
     taskId?: string;
   },
   context?: HttpContext
 
 ): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, TaskService.DeleteTaskPath, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, TaskService.CompleteTaskPath, 'delete');
     if (params) {
       rb.query('taskId', params.taskId, {});
     }
@@ -208,18 +261,18 @@ export class TaskService extends BaseService {
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `deleteTask$Response()` instead.
+   * To access the full response (for headers, for example), `completeTask$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deleteTask(params?: {
+  completeTask(params?: {
     taskId?: string;
   },
   context?: HttpContext
 
 ): Observable<void> {
 
-    return this.deleteTask$Response(params,context).pipe(
+    return this.completeTask$Response(params,context).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }

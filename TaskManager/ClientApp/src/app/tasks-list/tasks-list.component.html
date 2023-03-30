@@ -9,7 +9,7 @@
 
 <div>
 
-  <button (click)="delete()" type="button" class="btn btn-primary">
+  <button (click)="markComplete()" type="button" class="btn btn-primary">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
       <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
     </svg>  Mark Complete Selected
@@ -19,7 +19,7 @@
 
 <!--Active tasks-->
 
-<div>
+<div class="accordion">
   <br />
   <h3>Active Tasks</h3>
   <table class="table table-hover" data-resizable="true">
@@ -35,6 +35,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let task of tasksList">
+        <!--[(ngModel)]="task.selected"-->
         <th scope="row"><input [(ngModel)]="task.selected" class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="..."></th>
         <td>{{task.name}}</td>
         <td>{{task.description}}</td>
@@ -51,20 +52,22 @@
 <div>
   <br />
   <h3>Completed Tasks</h3>
-  <table class="table table-hover" data-resizable="true">
+  <table class="table" data-resizable="true">
     <thead>
       <tr id="task-table-headers">
         <th scope="col"></th>
         <th scope="col">Task Name</th>
+        <th scope="col">Description</th>
         <!--        <th scope="col">Due Date</th>-->
         <th scope="col">Assigned</th>
         <th scope="col">Priority</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let task of tasksList">
-        <th scope="row"><input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="..."></th>
+      <tr *ngFor="let task of completedTasksList" class="table-secondary">
+        <th scope="row"></th>
         <td>{{task.name}}</td>
+        <td>{{task.description}}</td>
         <!--        <td>{{task.dueDate | date}}</td>-->
         <td>{{task.assignedFirstName}} {{task.assignedLastName}}</td>
         <td>{{task.priority}}</td>

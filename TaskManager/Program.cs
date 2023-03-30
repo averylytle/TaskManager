@@ -7,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddDbContext<Entities>(options =>
+	options.UseInMemoryDatabase(databaseName: "Tasks"),
+	ServiceLifetime.Singleton);
+
 builder.Services.AddControllersWithViews();
 
 //required for SwaggerAPI and OpenAPI (RESTful API) so our client app can communicate with the server
@@ -25,8 +29,35 @@ builder.Services.AddSwaggerGen(c =>
 	c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"] + e.ActionDescriptor.RouteValues["controller"]}");
 });
 
+builder.Services.AddSingleton<Entities>();
 
 var app = builder.Build();
+
+var entities = app.Services.CreateScope().ServiceProvider.GetService<Entities>();
+
+Tasks[] tasksToSeed = new Tasks[]
+{
+	new ( Guid.NewGuid(),
+			"Azure Training",
+			"Complete all the azure training required",
+			"Avery",
+			"Lytle",
+			"Low",
+			0
+			),
+		new ( Guid.NewGuid(),
+			"Chores",
+			"Do all my house chores",
+			"Avery",
+			"Lytle",
+			"Medium",
+			0
+			)
+};
+
+entities.Tasks.AddRange(tasksToSeed);
+
+entities.SaveChanges();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

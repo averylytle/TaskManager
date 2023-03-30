@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Time } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TaskService } from './../api/services/task.service'
+import { CompletedTasksService } from './../api/services/completed-tasks.service'
 import { TasksDto, TasksRm } from '../api/models'
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialogModule } from "@angular/material";
 
 @Component({
   selector: 'app-tasks-list',
@@ -14,8 +16,12 @@ export class TasksListComponent implements OnInit {
 
   tasksList: TasksRm[] = []
 
+  completedTasksList: TasksRm[] = []
+
   constructor(private taskService: TaskService,
-    private router: Router
+    private completedService: CompletedTasksService,
+    private router: Router,
+    private matdialog: MatDialogModule
   ) {  }
 
   /*  taskForm = this.fb.group({
@@ -25,17 +31,21 @@ export class TasksListComponent implements OnInit {
   ngOnInit(): void {
     this.taskService.searchTask({})
       .subscribe(response => this.tasksList = response, this.handleError)
+
+    this.completedService.listCompleteCompletedTasks({})
+      .subscribe(response => this.completedTasksList = response, this.handleError)
   }
 
    addTask(){
     this.router.navigate(['/add-task'])
   }
 
-  delete() {
+
+  markComplete() {
     const dto: TasksDto = {
       taskId: this.tasksList[0].taskId
     };
-    this.taskService.deleteTask({ taskId: dto.taskId })
+    this.taskService.completeTask({ taskId: dto.taskId })
       .subscribe(_ => this.tasksList)
     this.tasksList = this.tasksList.filter(x => !x.selected);
   }
