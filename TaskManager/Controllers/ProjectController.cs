@@ -38,43 +38,42 @@ namespace TaskManager.Controllers
 			_entities = entities;
 		}
 
+
+
+		/*
+		 Getting all the projects. Leaving the ProjectRM with Users and Tasks for now
+		to test the API. Might remove later
+		 */
 		[HttpGet]
 		[ProducesResponseType(400)]//client side error
 		[ProducesResponseType(500)]//server side error. database connection string failure 
 		[ProducesResponseType(typeof(IEnumerable<ProjectRm>), 200)]
 		public IEnumerable<ProjectRm> GetProjects()
 		{
-			var projectRmList = _entities.Projects
+			var projects = _entities.Projects.ToArray().Select(project => new ProjectRm(
+				project.ProjectId,
+					project.ProjectName,
+					project.ProjectDescription ?? "",
+					/*null,
+					null*/
+					project.Users ?? null,
+					project.Tasks ?? null
+				));
+
+			/*var projectRmList = _entities.Projects
 				.Select(project => new ProjectRm(
 					project.ProjectId,
 					project.ProjectName,
 					project.ProjectDescription ?? "",
 					project.Users ?? null,
 					project.Tasks ?? null
+					));*/
 
-					/*					,
-										null,//null for users and tasks. This will only return a list of projects.
-										null*/
-					));
+			return projects;
 
-			return projectRmList;
-
-
-			/*var tasksRmList = _entities.Tasks.
-				Where(t => t.IsComplete == 0).
-				Select(task => new TasksRm(
-				task.TaskId,
-				task.Name,
-				task.Description,
-				task.AssignedFirstName,
-				task.AssignedLastName,
-				task.AssignedEmail,
-				task.Priority,
-				task.IsComplete));
-
-			return tasksRmList;*/
 		}
 
+		/*//maybe move this to the task controller???
 		[HttpGet("{email}")]
 		[ProducesResponseType(500)]
 		[ProducesResponseType(400)]
@@ -110,7 +109,7 @@ namespace TaskManager.Controllers
 				return NotFound(ex.Message);
 			}
 			
-		}
+		}*/
 
 
 		[HttpPost]
@@ -126,7 +125,7 @@ namespace TaskManager.Controllers
 				_entities.Projects.Add(new Project(
 				dto.ProjectId,
 				dto.ProjectName,
-				null,
+				dto.Description,
 				null,
 				null
 				));

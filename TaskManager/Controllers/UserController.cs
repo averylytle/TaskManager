@@ -20,12 +20,15 @@ namespace TaskManager.Controllers
 
 		private static IList<User> Users = new List<User>();
 
-		[HttpPost]
+		/*[HttpPost]
 		[ProducesResponseType(201)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(500)]
 		public IActionResult Register(NewUserDto dto)
 		{
+
+			//Registering a user should maybe not be associated with Project. A user should be able to register
+			//on the website without being in a project first. Then get assigned to a project. Ugh. 
 
 			_entities.Users.Add(new User(
 				dto.Email,
@@ -38,12 +41,12 @@ namespace TaskManager.Controllers
 			return CreatedAtAction(nameof(Find), new {email = dto.Email});
 
 
-			/*Users.Add(new User(
+			*//*Users.Add(new User(
 				dto.Email,
 				dto.FirstName,
 				dto.LastName));
 
-			return CreatedAtAction(nameof(Find), new {email = dto.Email});*/
+			return CreatedAtAction(nameof(Find), new {email = dto.Email});*//*
 		}
 
 		[HttpGet("{email}")]
@@ -60,19 +63,6 @@ namespace TaskManager.Controllers
 				);
 
 			return Ok(rm);
-
-			/*var user = Users.FirstOrDefault(p => p.Email == email);
-
-			if (user == null)
-				return NotFound();
-
-			var rm = new UserRm(
-				user.Email,
-				user.FirstName,
-				user.LastName
-				);
-
-			return Ok(rm);*/
-		}
+		}*/
 	}
 }

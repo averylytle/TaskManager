@@ -3,6 +3,7 @@
 	public class Tasks //can I change this to a record?
 	{
 		public Guid TaskId { get; set; }
+		//need a Project ID!!
 		public string Name { get; set; }
 		public string Description { get; set; }
 

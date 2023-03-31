@@ -3,6 +3,7 @@
 namespace TaskManager.Dtos
 {
 	public record TasksDto(
+		[Required] Guid ProjectId,//required to assign a task to a project
 		[Required] Guid TaskId,
 		[Required] string Name,
 		//might need to change string length to accommodate description

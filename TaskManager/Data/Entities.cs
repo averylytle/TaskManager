@@ -6,9 +6,9 @@ namespace TaskManager.Data
 {
 	public class Entities : DbContext
 	{
-		public DbSet<Tasks> Tasks => Set<Tasks>();
+		//public DbSet<Tasks> Tasks => Set<Tasks>();
 
-		public DbSet<User> Users => Set<User>();
+		//public DbSet<User> Users => Set<User>();
 		public DbSet<Project> Projects => Set<Project>();
 
 		public Entities(DbContextOptions<Entities> options) : base(options)
@@ -19,11 +19,15 @@ namespace TaskManager.Data
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			//setting the primary key for Tasks
-			modelBuilder.Entity<Tasks>().HasKey(t => t.TaskId);
+			//modelBuilder.Entity<Tasks>().HasKey(t => t.TaskId);
 
-			modelBuilder.Entity<User>().HasKey(p => p.Email);
+			//modelBuilder.Entity<User>().HasKey(p => p.Email);
 
 			modelBuilder.Entity<Project>().HasKey(p => p.ProjectId);
+
+			//setting up the S
+			modelBuilder.Entity<Project>().OwnsMany(p => p.Tasks);
+			modelBuilder.Entity<Project>().OwnsMany(p => p.Users);
 		}
 
 	}

@@ -17,7 +17,7 @@ namespace TaskManager.Controllers
 			_entities = entities;
 		}
 
-		[ProducesResponseType(400)]//client side error
+		/*[ProducesResponseType(400)]//client side error
 		[ProducesResponseType(500)]//server side error. database connection string failure 
 		[ProducesResponseType(typeof(IEnumerable<TasksRm>), 200)]
 		[HttpGet]//will always use a readmodel
@@ -36,6 +36,6 @@ namespace TaskManager.Controllers
 				task.IsComplete));
 
 			return tasksRmList;
-		}
+		}*/
 	}
 }

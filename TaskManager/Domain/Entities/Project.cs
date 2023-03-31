@@ -2,7 +2,7 @@
 
 namespace TaskManager.Domain.Entities
 {
-	//use this for tasks actually assigned to people. compare to 'Booking' 
+	//use this for tasks actually assigned to people. This is the 'Flight'
 /*
  A project can contain many tasks and many users but a task can only be assigned to one project
 Users can be assigned to many projects.
@@ -12,8 +12,8 @@ Users can be assigned to many projects.
 		public Guid ProjectId { get; set; }
 		public string ProjectName { get; set; }
 		public string? ProjectDescription { get; set; }
-		public IList<User>? Users { get; set; }
-		public IList<Tasks>? Tasks { get; set; }
+		public IList<User>? Users { get; set; } = new List<User>();
+		public IList<Tasks>? Tasks { get; set; } = new List<Tasks>();
 
 		public Project() { }
 
@@ -26,18 +26,32 @@ Users can be assigned to many projects.
 			Tasks = tasks;
 		}
 
-		internal object? AddTask(Task task)
+		internal object? AddTask(Tasks tasks)
 		{
 			var project = this;
 
 			//could Task task ever be null? Added null check just in case
 
-			if (task == null)
+
+			//checking if task already exists
+			if (tasks == null)
 			{
 				return new DuplicateTaskError();
 			}
 
-			project.AddTask(task);
+			//project.AddTask(tasks);
+			project.Tasks.Add(tasks
+				);
+
+/*			new Tasks(
+					tasks.TaskId,
+					tasks.Name,
+					tasks.Description,
+					tasks.AssignedFirstName,
+					tasks.AssignedLastName,
+					tasks.AssignedEmail,
+					tasks.Priority,
+					tasks.IsComplete)*/
 
 			return null;
 		}
@@ -51,7 +65,8 @@ Users can be assigned to many projects.
 				return new DuplicateUserError();
 			}
 
-			project.AddUser(user);
+			//project.AddUser(user);
+			project.Users.Add(user);
 
 			return null;
 		}

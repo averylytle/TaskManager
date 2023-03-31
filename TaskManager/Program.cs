@@ -36,7 +36,7 @@ var app = builder.Build();
 var entities = app.Services.CreateScope().ServiceProvider.GetService<Entities>();
 
 
-Tasks[] tasksToSeed = new Tasks[]
+IList<Tasks> tasksToSeed = new List<Tasks>
 {
 	new ( Guid.NewGuid(),
 			"Azure Training",
@@ -67,7 +67,7 @@ Tasks[] tasksToSeed = new Tasks[]
 			)
 };
 
-User[] users = new User[]
+IList<User> users = new List<User>
 {
 	new ("avery@gmail.com",
 		"Avery",
@@ -80,7 +80,7 @@ User[] users = new User[]
 	
 
 
-Project[] projectsToSeed = new Project[]
+IList<Project> projectsToSeed = new List<Project>
 {
 	new (Guid.NewGuid(),
 		"House Cleaning",

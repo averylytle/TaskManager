@@ -8,6 +8,7 @@ namespace TaskManager.Dtos
 
 	//this could contain more information than the passenger read model, such as flightinfo
 	public record NewUserDto(
+		[Required] Guid ProjectId,//required to assign a User to a project
 		[Required][EmailAddress][StringLength(100, MinimumLength = 5)] string Email,
 		[Required][MinLength(2)][MaxLength(50)] string FirstName,
 		[Required][MinLength(2)][MaxLength(50)] string LastName
