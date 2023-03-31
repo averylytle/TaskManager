@@ -33,25 +33,13 @@ Users can be assigned to many projects.
 			//could Task task ever be null? Added null check just in case
 
 
-			//checking if task already exists
-			if (tasks == null)
+		    //checking if task already exists
+			if((project.Tasks.FirstOrDefault(t => t.TaskId == tasks.TaskId))!=null)
 			{
 				return new DuplicateTaskError();
 			}
 
-			//project.AddTask(tasks);
-			project.Tasks.Add(tasks
-				);
-
-/*			new Tasks(
-					tasks.TaskId,
-					tasks.Name,
-					tasks.Description,
-					tasks.AssignedFirstName,
-					tasks.AssignedLastName,
-					tasks.AssignedEmail,
-					tasks.Priority,
-					tasks.IsComplete)*/
+			project.Tasks.Add(tasks);
 
 			return null;
 		}
@@ -60,12 +48,11 @@ Users can be assigned to many projects.
 		{
 			var project = this;
 
-			if(user == null)
+			if (project.Users.Contains(user))
 			{
 				return new DuplicateUserError();
 			}
 
-			//project.AddUser(user);
 			project.Users.Add(user);
 
 			return null;

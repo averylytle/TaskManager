@@ -91,8 +91,8 @@ IList<Project> projectsToSeed = new List<Project>
 	new (Guid.NewGuid(),
 	"Empty Project",
 	"Project without any users or tasks assigned yet.",
-	null,
-	null)
+	new List<User>(),
+	new List<Tasks>())
 };
 
 //entities.Tasks.AddRange(tasksToSeed);

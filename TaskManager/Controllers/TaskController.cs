@@ -132,6 +132,18 @@ namespace TaskManager.Controllers
 
 			if (project == null) { return NotFound(); }
 
+			/*Tasks tasks = new(
+				dto.TaskId,
+				dto.Name,
+				dto.Description ?? "",
+				dto.AssignedFirstName ?? "",
+				dto.AssignedLastName ?? "",
+				dto.AssignedEmail ?? "",
+				dto.Priority ?? "",
+				dto.IsComplete);
+
+			var error = project.AddTask(tasks);*/
+
 			var error = project.AddTask(new Tasks(
 				dto.TaskId,
 				dto.Name,
@@ -141,7 +153,9 @@ namespace TaskManager.Controllers
 				dto.AssignedEmail ?? "",
 				dto.Priority ?? "",
 				dto.IsComplete));
-			
+
+
+
 			if (error is DuplicateTaskError)
 			{
 				//eventually log the error 
@@ -192,7 +206,7 @@ namespace TaskManager.Controllers
 
 		}
 
-		/*[HttpPut]
+		[HttpPut]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(500)]//missing database connection or something
@@ -202,7 +216,10 @@ namespace TaskManager.Controllers
 		{
 			//i think that when angular sends the dto over, there won't be any "string" being sent. it'll be
 			//filled out with whatever that dto actually is. 
-			var task = _entities.Tasks.Find(dto.TaskId);
+
+			var project = _entities.Projects.Find(dto.ProjectId);
+
+			var task = project.Tasks.FirstOrDefault(t => t.TaskId == dto.TaskId);
 
 			if (task == null)
 			{
@@ -230,7 +247,7 @@ namespace TaskManager.Controllers
 			return Ok("Task updated.");
 
 
-		}*/
+		}
 	}
 }
 

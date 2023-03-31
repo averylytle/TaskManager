@@ -126,8 +126,8 @@ namespace TaskManager.Controllers
 				dto.ProjectId,
 				dto.ProjectName,
 				dto.Description,
-				null,
-				null
+				new List<User>(),
+				new List<Tasks>()
 				));
 			}
 
