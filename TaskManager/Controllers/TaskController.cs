@@ -87,19 +87,50 @@ namespace TaskManager.Controllers
 		{
 			try
 			{
+				var user = _entities.Users.FirstOrDefault(u => u.Email == email);
+
 				var tasks = _entities.Projects.ToArray().SelectMany(p => p.Tasks
 					.Where(t => t.AssignedEmail == email && t.IsComplete == 0))//only shows the active tasks
 					.Select(p => new TasksRm(
 						p.TaskId,
 						p.Name,
 						p.Description,
-						p.AssignedFirstName,
-						p.AssignedLastName,
-						p.AssignedEmail,
+						user.FirstName,
+						user.LastName,
+						p.AssignedEmail ?? "",
 						p.Priority,
 						p.IsComplete
 
 						));
+
+
+				/*var tasks = _entities.Projects.ToArray().SelectMany(
+					p => p.Tasks.Where(t => t.AssignedEmail == email && t.IsComplete == 0),
+					//u => u.Users,
+					(p, t) => new TasksRm
+					{
+						TaskId = t.TaskId,
+					});*/
+
+				/*var tasks = _entities.Projects.ToArray().SelectMany(p => p.Tasks
+					.Where(t => t.AssignedEmail == email && t.IsComplete == 0))//only shows the active tasks
+					.Select(p => new TasksRm(
+						p.TaskId,
+						p.Name,
+						p.Description,
+						p.AssignedFirstName ?? "",
+						p.AssignedLastName ?? "",
+						p.AssignedEmail ?? "",
+						p.Priority,
+						p.IsComplete
+
+						));*/
+
+				if(user == null)
+				{
+					return NotFound($"The user with email {email} is not registered.");
+				}
+
 				if (tasks.Count() <= 0)
 				{
 					return NotFound("No tasks found for that user.");
@@ -146,13 +177,16 @@ namespace TaskManager.Controllers
 
 			var error = project.AddTask(tasks);*/
 
+
+			//task assignment is left blank to keep tasks about tasks, not users. 
+			//will add a function to assign a user to a task
 			var error = project.AddTask(new Tasks(
 				dto.TaskId,
 				dto.Name,
 				dto.Description ?? "",
-				dto.AssignedFirstName ?? "",
-				dto.AssignedLastName ?? "",
-				dto.AssignedEmail ?? "",
+				"",
+				"",
+				"",
 				dto.Priority ?? "",
 				dto.IsComplete));
 
@@ -208,7 +242,7 @@ namespace TaskManager.Controllers
 
 		}
 
-		[HttpPut]
+		/*[HttpPut]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(500)]//missing database connection or something
@@ -249,7 +283,7 @@ namespace TaskManager.Controllers
 			return Ok("Task updated.");
 
 
-		}
+		}*/
 	}
 }
 

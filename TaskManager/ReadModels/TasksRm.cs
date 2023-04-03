@@ -6,9 +6,9 @@
 		string Description,
 /*		DateTime CreatedDate,
 		DateTime DueDate,*/
-		string AssignedFirstName,
-		string AssignedLastName,
-		string AssignedEmail,
+		string? AssignedFirstName,
+		string? AssignedLastName,
+		string? AssignedEmail,
 		string Priority,
 		byte IsComplete
 		);

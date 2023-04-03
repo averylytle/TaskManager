@@ -8,9 +8,9 @@
 		public string Description { get; set; }
 
 		//maybe change this to assigned email
-		public string AssignedFirstName { get; set; } = string.Empty;
-		public string AssignedLastName { get; set; } = string.Empty;
-		public string AssignedEmail { get; set; } = string.Empty;
+		/*public string? AssignedFirstName { get; set; } = string.Empty;
+		public string? AssignedLastName { get; set; } = string.Empty;*/
+		public string? AssignedEmail { get; set; } = string.Empty;
 		public string Priority { get; set; } = string.Empty;
 
 		public byte IsComplete { get; set; } = 0;
@@ -25,8 +25,8 @@
 			TaskId = taskId;
 			Name = name;
 			Description = description;
-			AssignedFirstName = assignedFirstName;
-			AssignedLastName = assignedLastName;
+			/*AssignedFirstName = assignedFirstName;
+			AssignedLastName = assignedLastName;*/
 			AssignedEmail = assignedEmail;
 			Priority = priority;
 			IsComplete = isComplete;
