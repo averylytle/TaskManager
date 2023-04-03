@@ -130,7 +130,9 @@ namespace TaskManager.Controllers
 			//getting the project that we want to add a task to
 			var project = _entities.Projects.SingleOrDefault(p => p.ProjectId == dto.ProjectId);
 
-			if (project == null) { return NotFound(); }
+			if (project == null) { return NotFound("The project id is invalid."); }
+
+			
 
 			/*Tasks tasks = new(
 				dto.TaskId,

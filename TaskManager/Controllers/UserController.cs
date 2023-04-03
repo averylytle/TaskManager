@@ -26,11 +26,19 @@ namespace TaskManager.Controllers
 		[ProducesResponseType(201)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(500)]
+		[ProducesResponseType(409)]
 		public IActionResult Register(NewUserDto dto)
 		{
 
 			//Registering a user should maybe not be associated with Project. A user should be able to register
 			//on the website without being in a project first. Then get assigned to a project. Ugh. 
+
+			//checking to see if a user is already registered
+			if(_entities.Users.FirstOrDefault(u => u.Email == dto.Email) != null)
+			{
+				return Conflict(new { message = "A user with that email already exists." });
+			}
+
 
 			_entities.Users.Add(new User(
 				dto.Email,
