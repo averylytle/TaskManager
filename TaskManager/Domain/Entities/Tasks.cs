@@ -20,7 +20,7 @@
 
 		public Tasks() { }
 
-		public Tasks(Guid taskId, string name, string description, string assignedFirstName, string assignedLastName, string assignedEmail, string priority, byte isComplete)
+		public Tasks(Guid taskId, string name, string description, string assignedEmail, string priority, byte isComplete)
 		{
 			TaskId = taskId;
 			Name = name;

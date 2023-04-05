@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using TaskManager.Data;
 using TaskManager.Domain.Entities;
+using TaskManager.Domain.Errors;
 using TaskManager.Dtos;
 using TaskManager.ReadModels;
 
@@ -142,6 +143,8 @@ namespace TaskManager.Controllers
 			return CreatedAtAction("Project Created", new { id = dto.ProjectId });
 
 		}
+
+		
 
 	}
 }

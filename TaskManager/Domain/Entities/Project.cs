@@ -57,5 +57,41 @@ Users can be assigned to many projects.
 
 			return null;
 		}
+
+		/*internal object? RemoveTask(Tasks tasks)
+		{
+			var project = this;
+
+			//could Task task ever be null? Added null check just in case
+
+
+			//making sure task exists
+			if (project.Tasks.FirstOrDefault(t => t.TaskId == tasks.TaskId) != null)
+			{
+				project.Tasks.Remove(tasks);
+			}
+			else
+			{
+				return new DuplicateTaskError();
+			}
+
+			return null;
+		}*/
+
+		internal object? RemoveUser(User user)//redesign with an error
+		{
+			var project = this;
+
+			//if the user is assigned to the project, then remove the user
+			if (project.Users.Contains(user))
+			{
+				project.Users.Remove(user);
+			}
+			else
+			{
+				return new UserNotAssignedError();
+			}
+			return null;
+		}
 	}
 }

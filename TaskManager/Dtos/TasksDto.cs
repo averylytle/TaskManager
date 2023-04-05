@@ -9,11 +9,10 @@ namespace TaskManager.Dtos
 		//might need to change string length to accommodate description
 		[StringLength(1000)] string Description,
 		//DateTime DueDate,
-		string? AssignedFirstName,
-		string? AssignedLastName,
+/*		string? AssignedFirstName,
+		string? AssignedLastName,*/
 		string? AssignedEmail,
-		string? Priority,
-		byte IsComplete = 0
+		string? Priority
 		);
 }
 

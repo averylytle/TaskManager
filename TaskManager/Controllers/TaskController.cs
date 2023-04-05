@@ -8,6 +8,8 @@ using TaskManager.Data;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TaskManager.Domain.Errors;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace TaskManager.Controllers
 {
@@ -19,31 +21,6 @@ namespace TaskManager.Controllers
 
 		//needed for dependency injection
 		private readonly Entities _entities;
-
-		/*public static Random random = new Random();
-
-		static private IList<TasksRm> tasksRm = new List<TasksRm>
-		{
-		new ( Guid.NewGuid(),
-			"Azure Training",
-			"Complete all the azure training required",
-			"Avery",
-			"Lytle",
-			"avery@gmail.com",
-			"Low",
-			0
-			),
-		new ( Guid.NewGuid(),
-			"Chores",
-			"Do all my house chores",
-			"Avery",
-			"Lytle",
-			"avery@gmail.com",
-			"Medium",
-			0
-			)
-		};*/
-
 
 		public TaskController(ILogger<TaskController> logger, Entities entities)
 		{
@@ -76,6 +53,70 @@ namespace TaskManager.Controllers
 			return tasksRmList;
 		}*/
 
+		
+		[HttpGet]
+		[ProducesResponseType(500)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		[ProducesResponseType(typeof(IEnumerable<TasksRm>), 200)]
+		public ActionResult<IEnumerable<TasksRm>> ListTasks(Guid projectId)
+		{
+
+/*
+ 
+ MY PROBLEM:
+I can get a list of the tasks with the projectId, but I can't figure out how to join the users first and last name
+ */
+
+			var project = _entities.Projects.Find(projectId);
+
+			//I need to get the users to relay back the user information 
+
+			
+
+			var tasksList = project.Tasks.ToArray();
+
+			var usersList = project.Users.ToArray();
+
+			var query = tasksList.Join(
+				usersList,
+				task => task.AssignedEmail,//key
+				user => user.Email,//primary key
+				(task, user) => new 
+				{
+					task.TaskId,
+					task.Name,
+					task.Description,
+					user.FirstName,
+					user.LastName,
+					task.AssignedEmail,
+					task.Priority,
+					task.IsComplete
+				}
+				).ToList();
+
+
+			//Converting query to a TasksRm
+
+			List<TasksRm> tasksRm = new List<TasksRm>();
+			
+			foreach(var task in query) 
+			{
+				/*TasksRm tasksRm1 = new TasksRm(
+					task.TaskId, task.Name, task.Description, task.FirstName, task.LastName, task.AssignedEmail,
+					task.Priority, task.IsComplete);*/
+				/*tasksRm.Append(new TasksRm(task.TaskId, task.Name, task.Description, task.FirstName, task.LastName, task.AssignedEmail,
+					task.Priority, task.IsComplete));*/
+				tasksRm.Add(new TasksRm(
+					task.TaskId, task.Name, task.Description, task.FirstName, task.LastName, task.AssignedEmail,
+					task.Priority, task.IsComplete));
+			}
+
+
+			return Ok(tasksRm);
+			
+		}
+
 		//was originally in project controller but now in task controller
 		[HttpGet("{email}")]
 		[ProducesResponseType(500)]
@@ -83,12 +124,14 @@ namespace TaskManager.Controllers
 		[ProducesResponseType(404)]
 		[ProducesResponseType(typeof(IEnumerable<TasksRm>), 200)]
 		//List all tasks related to a project based on user email
-		public ActionResult<IEnumerable<TasksRm>> ListTasks(string email)
+		public ActionResult<IEnumerable<TasksRm>> ListTasksByUser(string email)
 		{
 			try
 			{
+				//getting the user based on email to use in linq query below
 				var user = _entities.Users.FirstOrDefault(u => u.Email == email);
 
+				//grabbing all the tasks assigned to the user, using var user to send firstname and lastname back
 				var tasks = _entities.Projects.ToArray().SelectMany(p => p.Tasks
 					.Where(t => t.AssignedEmail == email && t.IsComplete == 0))//only shows the active tasks
 					.Select(p => new TasksRm(
@@ -104,34 +147,12 @@ namespace TaskManager.Controllers
 						));
 
 
-				/*var tasks = _entities.Projects.ToArray().SelectMany(
-					p => p.Tasks.Where(t => t.AssignedEmail == email && t.IsComplete == 0),
-					//u => u.Users,
-					(p, t) => new TasksRm
-					{
-						TaskId = t.TaskId,
-					});*/
-
-				/*var tasks = _entities.Projects.ToArray().SelectMany(p => p.Tasks
-					.Where(t => t.AssignedEmail == email && t.IsComplete == 0))//only shows the active tasks
-					.Select(p => new TasksRm(
-						p.TaskId,
-						p.Name,
-						p.Description,
-						p.AssignedFirstName ?? "",
-						p.AssignedLastName ?? "",
-						p.AssignedEmail ?? "",
-						p.Priority,
-						p.IsComplete
-
-						));*/
-
-				if(user == null)
+				if (user == null)
 				{
 					return NotFound($"The user with email {email} is not registered.");
 				}
 
-				if (tasks.Count() <= 0)
+				if (!tasks.Any())//if it is false
 				{
 					return NotFound("No tasks found for that user.");
 				}
@@ -163,20 +184,6 @@ namespace TaskManager.Controllers
 
 			if (project == null) { return NotFound("The project id is invalid."); }
 
-			
-
-			/*Tasks tasks = new(
-				dto.TaskId,
-				dto.Name,
-				dto.Description ?? "",
-				dto.AssignedFirstName ?? "",
-				dto.AssignedLastName ?? "",
-				dto.AssignedEmail ?? "",
-				dto.Priority ?? "",
-				dto.IsComplete);
-
-			var error = project.AddTask(tasks);*/
-
 
 			//task assignment is left blank to keep tasks about tasks, not users. 
 			//will add a function to assign a user to a task
@@ -184,11 +191,9 @@ namespace TaskManager.Controllers
 				dto.TaskId,
 				dto.Name,
 				dto.Description ?? "",
-				"",
-				"",
-				"",
+				"",//no assigned email because user assignment takes place in a different location
 				dto.Priority ?? "",
-				dto.IsComplete));
+				0));
 
 
 
@@ -198,6 +203,10 @@ namespace TaskManager.Controllers
 				return Conflict(new {message = "A Task with that taskId already exists." });
 			}
 			
+			/*if (error is UserNotAssignedError)
+			{
+				return Conflict(new { message = "The user is not assigned to the project yet." });
+			}*/
 
 			_entities.SaveChanges();
 
@@ -240,23 +249,33 @@ namespace TaskManager.Controllers
 
 			return Ok("Task Completed.");
 
+			/*//success call saying I deleted something and theres no content anymore
+			return NoContent();*/
+
 		}
 
-		/*[HttpPut]
+		[HttpPut]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(500)]//missing database connection or something
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		//@ just makes params a param bc it's normally a reserved keyword in C#
+		
 		public IActionResult Edit(TasksDto dto)
 		{
 			//i think that when angular sends the dto over, there won't be any "string" being sent. it'll be
 			//filled out with whatever that dto actually is. 
 
+
+			//maybe I don't need to edit the first name and last name here. I just add the user and it shows.
+			//Only email
+			//editing user later on will change it on the task and project
+
+
 			var project = _entities.Projects.Find(dto.ProjectId);
 
 			var task = project.Tasks.FirstOrDefault(t => t.TaskId == dto.TaskId);
 
+		
 			if (task == null)
 			{
 				return NotFound();
@@ -268,11 +287,10 @@ namespace TaskManager.Controllers
 			if (task.Description != dto.Description && dto.Description != null)
 				task.Description = dto.Description;
 
-			if (task.AssignedFirstName != dto.AssignedFirstName && dto.AssignedFirstName != null)
-				task.AssignedFirstName = dto.AssignedFirstName;
-
-			if (task.AssignedLastName != dto.AssignedLastName && dto.AssignedLastName != null)
-				task.AssignedLastName = dto.AssignedLastName;
+			if (task.AssignedEmail != dto.AssignedEmail && dto.AssignedEmail != null)
+			{
+				task.AssignedEmail = dto.AssignedEmail;
+			}
 
 			if (task.Priority != dto.Priority && dto.Priority != null)
 				task.Priority = dto.Priority;
@@ -282,8 +300,9 @@ namespace TaskManager.Controllers
 
 			return Ok("Task updated.");
 
+		}
 
-		}*/
+		
 	}
 }
 

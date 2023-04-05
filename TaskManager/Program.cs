@@ -41,8 +41,8 @@ IList<Tasks> tasksToSeed = new List<Tasks>
 	new ( Guid.NewGuid(),
 			"Azure Training",
 			"Complete all the azure training required",
-			"Avery",
-			"Lytle",
+/*			"Avery",
+			"Lytle",*/
 			"avery@gmail.com",
 			"Low",
 			0
@@ -50,8 +50,8 @@ IList<Tasks> tasksToSeed = new List<Tasks>
 		new ( Guid.NewGuid(),
 			"Chores",
 			"Do all my house chores",
-			"Avery",
-			"Lytle",
+/*			"Avery",
+			"Lytle",*/
 			"avery@gmail.com",
 			"Medium",
 			0
@@ -59,8 +59,8 @@ IList<Tasks> tasksToSeed = new List<Tasks>
 		new ( Guid.NewGuid(),
 			"C# stuff",
 			"He's really good at C#!",
-			"John",
-			"Rajikannu",
+/*			"John",
+			"Rajikannu",*/
 			"john@gmail.com",
 			"Medium",
 			0
