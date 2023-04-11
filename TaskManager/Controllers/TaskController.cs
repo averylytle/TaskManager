@@ -64,15 +64,18 @@ namespace TaskManager.Controllers
 
 /*
  
- MY PROBLEM:
-I can get a list of the tasks with the projectId, but I can't figure out how to join the users first and last name
+			BROKEN - won't return tasks because the userlist is empty
+ 
  */
-
+			//this is the issue. should be first or default 
 			var project = _entities.Projects.Find(projectId);
 
 			//I need to get the users to relay back the user information 
 
-			
+			if (project == null)
+			{
+				return NotFound();
+			}
 
 			var tasksList = project.Tasks.ToArray();
 
@@ -102,11 +105,6 @@ I can get a list of the tasks with the projectId, but I can't figure out how to 
 			
 			foreach(var task in query) 
 			{
-				/*TasksRm tasksRm1 = new TasksRm(
-					task.TaskId, task.Name, task.Description, task.FirstName, task.LastName, task.AssignedEmail,
-					task.Priority, task.IsComplete);*/
-				/*tasksRm.Append(new TasksRm(task.TaskId, task.Name, task.Description, task.FirstName, task.LastName, task.AssignedEmail,
-					task.Priority, task.IsComplete));*/
 				tasksRm.Add(new TasksRm(
 					task.TaskId, task.Name, task.Description, task.FirstName, task.LastName, task.AssignedEmail,
 					task.Priority, task.IsComplete));
@@ -231,6 +229,11 @@ I can get a list of the tasks with the projectId, but I can't figure out how to 
 			Can I find a project via a task Id? maybe if I pass a project Id and a taskId
 			 */
 			var project = _entities.Projects.Find(projectId);
+
+			if (project == null)
+			{
+				return NotFound();
+			}
 
 			var task = project.Tasks.FirstOrDefault(t => t.TaskId == taskId);
 

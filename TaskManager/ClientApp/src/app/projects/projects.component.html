@@ -1,0 +1,33 @@
+<div>
+  <h2>Projects</h2>
+</div>
+<div *ngFor="let project of projectList">
+  <p>{{project.projectName}}</p>
+</div>
+
+
+<div class="accordion">
+  <br />
+  <h3>Active Tasks</h3>
+  <table class="table table-hover" data-resizable="true">
+    <thead>
+      <tr id="task-table-headers">
+        <th scope="col">Task Name</th>
+        <th scope="col">Description</th>
+        <!--<th scope="col">Due Date</th>-->
+        <!--<th scope="col">Assigned</th>-->
+        <th scope="col">Priority</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let project of projectList">
+        <tr *ngFor="let task of project.tasks" >
+          <td>{{task.name}}</td>
+          <td>{{task.description}}</td>
+          <td>{{task.priority}}</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+</div>

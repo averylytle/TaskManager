@@ -177,4 +177,57 @@ export class UserService extends BaseService {
     );
   }
 
+  /**
+   * Path part for operation editUser
+   */
+  static readonly EditUserPath = '/User/{email}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `editUser()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  editUser$Response(params: {
+    email: string;
+  },
+  context?: HttpContext
+
+): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UserService.EditUserPath, 'put');
+    if (params) {
+      rb.path('email', params.email, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*',
+      context: context
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `editUser$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  editUser(params: {
+    email: string;
+  },
+  context?: HttpContext
+
+): Observable<void> {
+
+    return this.editUser$Response(params,context).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
 }

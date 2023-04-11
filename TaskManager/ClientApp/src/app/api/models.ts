@@ -1,5 +1,9 @@
 export { NewUserDto } from './models/new-user-dto';
 export { ProblemDetails } from './models/problem-details';
+export { ProjectDto } from './models/project-dto';
+export { ProjectRm } from './models/project-rm';
+export { Tasks } from './models/tasks';
 export { TasksDto } from './models/tasks-dto';
 export { TasksRm } from './models/tasks-rm';
+export { User } from './models/user';
 export { UserRm } from './models/user-rm';

@@ -25,8 +25,10 @@ namespace TaskManager.Data
 
 			modelBuilder.Entity<Project>().HasKey(p => p.ProjectId);
 
+			modelBuilder.Entity<Tasks>().HasKey(p => p.TaskId);
+
 			//setting up the S
-			modelBuilder.Entity<Project>().OwnsMany(p => p.Tasks);
+			//modelBuilder.Entity<Project>().OwnsMany(p => p.Tasks);
 			//modelBuilder.Entity<Project>().OwnsMany(p => p.Users);
 		}
 

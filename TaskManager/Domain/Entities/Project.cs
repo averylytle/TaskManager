@@ -1,4 +1,5 @@
-﻿using TaskManager.Domain.Errors;
+﻿using System.ComponentModel.DataAnnotations;
+using TaskManager.Domain.Errors;
 
 namespace TaskManager.Domain.Entities
 {
@@ -24,6 +25,20 @@ Users can be assigned to many projects.
 			ProjectDescription = projectDescription;
 			Users = users;
 			Tasks = tasks;
+		}
+
+		internal object? GetProjectId(string email)
+		{
+			var project = this;
+
+			var user = project.Users.FirstOrDefault(x => x.Email == email);
+
+			if (project.Users.Contains(user))
+			{
+				return project.ProjectId;
+			}
+
+			return new UserNotAssignedError();
 		}
 
 		internal object? AddTask(Tasks tasks)

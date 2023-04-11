@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Time } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TaskService } from './../api/services/task.service'
-import { CompletedTasksService } from './../api/services/completed-tasks.service'
-import { TasksDto, TasksRm } from '../api/models'
+import { TaskService } from './../api/services/task.service';
+import { CompletedTasksService } from './../api/services/completed-tasks.service';
+import { TasksDto, TasksRm } from '../api/models';
+import { AuthService } from './../auth/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 
@@ -20,7 +21,8 @@ export class TasksListComponent implements OnInit {
 
   constructor(private taskService: TaskService,
     private completedService: CompletedTasksService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {  }
 
   /*  taskForm = this.fb.group({
@@ -28,7 +30,11 @@ export class TasksListComponent implements OnInit {
       })*/
 
   ngOnInit(): void {
-    this.taskService.searchTask({})
+
+    if (!this.authService.currentUser?.email)
+      this.router.navigate(['/register-user'])
+
+    this.taskService.listTasksByUserTask({ email: this.authService.currentUser?.email ?? '' })
       .subscribe(response => this.tasksList = response, this.handleError)
 
     this.completedService.listCompleteCompletedTasks({})

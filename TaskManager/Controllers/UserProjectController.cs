@@ -37,7 +37,7 @@ namespace TaskManager.Controllers
 			//Business logic: to be assigned to a project, the user must first be registered
 
 			//finding the project
-			var project = _entities.Projects.Find(projectId);
+			var project = _entities.Projects.SingleOrDefault(p => p.ProjectId == projectId);
 			if (project == null) { return NotFound("The Project Id is invalid."); }
 
 			//I need to find the user with the email

@@ -40,6 +40,73 @@ namespace TaskManager.Controllers
 		}
 
 
+		[HttpGet("{email}")]
+		[ProducesResponseType(400)]//client side error
+		[ProducesResponseType(500)]//server side error. database connection string failure 
+		[ProducesResponseType(typeof(IEnumerable<Guid>), 200)]
+		public IEnumerable<Guid> GetProjectIds(string email)
+		{
+			/*
+			 What I'm trying to do is get all the project Ids associated to the user. If the user is in two projects,
+			two project ids
+
+			will use project ids to list off all projects and tasks?
+
+
+			Can I get to the project with just an email?
+
+			
+
+			SELECT u.FirstName, u.LastName, *
+			FROM Projects p
+			JOIN Users u ON p.ProjectId = u.ProjectId;
+
+			 */
+
+			var users = _entities.Projects.ToArray().SelectMany(u => u.Users).Where(u => u.Email == email);
+
+			var query = (from project in _entities.Projects
+						 from user in users
+						 select project.ProjectId);
+
+			//var user = _entities.Users.FirstOrDefault(u => u.Email == email);
+
+			//Grabbing all projects
+			//var projects = _entities.Projects.Select(p => p.Users.FirstOrDefault(u => u.Email == email) == user);
+
+			//var test = _entities.Projects.Select(p => p.ProjectId).Where(p => p.);
+
+			//var test2 = test.Select(p => p.Users.FirstOrDefault(p => p.Email == email));
+
+			//var guids = _entities.Projects.Select(p => p.ProjectId);
+
+			
+			
+
+
+
+			/*var guids = _entities.Projects.ToArray().Select(p => p.ProjectId);
+
+			var tasks = _entities.Projects.ToArray().SelectMany(p => p.Tasks
+					.Where(t => t.AssignedEmail == email && t.IsComplete == 0))//only shows the active tasks
+					.Select(p => new TasksRm(
+						p.TaskId,
+						p.Name,
+						p.Description,
+						user.FirstName,
+						user.LastName,
+						p.AssignedEmail ?? "",
+						p.Priority,
+						p.IsComplete
+
+						));
+*/
+
+
+			return null;
+		}
+
+
 
 		/*
 		 Getting all the projects. Leaving the ProjectRM with Users and Tasks for now
@@ -51,6 +118,9 @@ namespace TaskManager.Controllers
 		[ProducesResponseType(typeof(IEnumerable<ProjectRm>), 200)]
 		public IEnumerable<ProjectRm> GetProjects()
 		{
+
+			var projectsTest = _entities.Projects;
+
 			var projects = _entities.Projects.ToArray().Select(project => new ProjectRm(
 				project.ProjectId,
 					project.ProjectName,
@@ -73,44 +143,6 @@ namespace TaskManager.Controllers
 			return projects;
 
 		}
-
-		/*//maybe move this to the task controller???
-		[HttpGet("{email}")]
-		[ProducesResponseType(500)]
-		[ProducesResponseType(400)]
-		[ProducesResponseType(404)]
-		[ProducesResponseType(typeof(IEnumerable<TasksRm>), 200)]
-		//List all tasks related to a project based on user email
-		public ActionResult<IEnumerable<TasksRm>> ListTasks(string email)
-		{
-			try
-			{
-				var tasks = _entities.Projects.ToArray().SelectMany(p => p.Tasks
-					.Where(t => t.AssignedEmail == email && t.IsComplete == 0))//only shows the active tasks
-					.Select(p => new TasksRm(
-						p.TaskId,
-						p.Name,
-						p.Description,
-						p.AssignedFirstName,
-						p.AssignedLastName,
-						p.AssignedEmail,
-						p.Priority,
-						p.IsComplete
-
-						));
-				if(tasks.Count() <= 0 )
-				{
-					return NotFound("No tasks found for that user.");
-				}
-
-				return Ok(tasks);
-			}
-			catch (Exception ex)
-			{
-				return NotFound(ex.Message);
-			}
-			
-		}*/
 
 
 		[HttpPost]

@@ -24,24 +24,26 @@ export class TaskService extends BaseService {
   }
 
   /**
-   * Path part for operation searchTask
+   * Path part for operation listTasksTask
    */
-  static readonly SearchTaskPath = '/Task';
+  static readonly ListTasksTaskPath = '/Task';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `searchTask$Plain()` instead.
+   * To access only the response body, use `listTasksTask$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  searchTask$Plain$Response(params?: {
+  listTasksTask$Plain$Response(params?: {
+    projectId?: string;
   },
   context?: HttpContext
 
 ): Observable<StrictHttpResponse<Array<TasksRm>>> {
 
-    const rb = new RequestBuilder(this.rootUrl, TaskService.SearchTaskPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, TaskService.ListTasksTaskPath, 'get');
     if (params) {
+      rb.query('projectId', params.projectId, {});
     }
 
     return this.http.request(rb.build({
@@ -58,35 +60,38 @@ export class TaskService extends BaseService {
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `searchTask$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `listTasksTask$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  searchTask$Plain(params?: {
+  listTasksTask$Plain(params?: {
+    projectId?: string;
   },
   context?: HttpContext
 
 ): Observable<Array<TasksRm>> {
 
-    return this.searchTask$Plain$Response(params,context).pipe(
+    return this.listTasksTask$Plain$Response(params,context).pipe(
       map((r: StrictHttpResponse<Array<TasksRm>>) => r.body as Array<TasksRm>)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `searchTask()` instead.
+   * To access only the response body, use `listTasksTask()` instead.
    *
    * This method doesn't expect any request body.
    */
-  searchTask$Response(params?: {
+  listTasksTask$Response(params?: {
+    projectId?: string;
   },
   context?: HttpContext
 
 ): Observable<StrictHttpResponse<Array<TasksRm>>> {
 
-    const rb = new RequestBuilder(this.rootUrl, TaskService.SearchTaskPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, TaskService.ListTasksTaskPath, 'get');
     if (params) {
+      rb.query('projectId', params.projectId, {});
     }
 
     return this.http.request(rb.build({
@@ -103,17 +108,18 @@ export class TaskService extends BaseService {
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `searchTask$Response()` instead.
+   * To access the full response (for headers, for example), `listTasksTask$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  searchTask(params?: {
+  listTasksTask(params?: {
+    projectId?: string;
   },
   context?: HttpContext
 
 ): Observable<Array<TasksRm>> {
 
-    return this.searchTask$Response(params,context).pipe(
+    return this.listTasksTask$Response(params,context).pipe(
       map((r: StrictHttpResponse<Array<TasksRm>>) => r.body as Array<TasksRm>)
     );
   }
@@ -236,6 +242,7 @@ export class TaskService extends BaseService {
    * This method doesn't expect any request body.
    */
   completeTask$Response(params?: {
+    projectId?: string;
     taskId?: string;
   },
   context?: HttpContext
@@ -244,6 +251,7 @@ export class TaskService extends BaseService {
 
     const rb = new RequestBuilder(this.rootUrl, TaskService.CompleteTaskPath, 'delete');
     if (params) {
+      rb.query('projectId', params.projectId, {});
       rb.query('taskId', params.taskId, {});
     }
 
@@ -266,6 +274,7 @@ export class TaskService extends BaseService {
    * This method doesn't expect any request body.
    */
   completeTask(params?: {
+    projectId?: string;
     taskId?: string;
   },
   context?: HttpContext
@@ -274,6 +283,107 @@ export class TaskService extends BaseService {
 
     return this.completeTask$Response(params,context).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation listTasksByUserTask
+   */
+  static readonly ListTasksByUserTaskPath = '/Task/{email}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `listTasksByUserTask$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listTasksByUserTask$Plain$Response(params: {
+    email: string;
+  },
+  context?: HttpContext
+
+): Observable<StrictHttpResponse<Array<TasksRm>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TaskService.ListTasksByUserTaskPath, 'get');
+    if (params) {
+      rb.path('email', params.email, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: 'text/plain',
+      context: context
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<TasksRm>>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `listTasksByUserTask$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listTasksByUserTask$Plain(params: {
+    email: string;
+  },
+  context?: HttpContext
+
+): Observable<Array<TasksRm>> {
+
+    return this.listTasksByUserTask$Plain$Response(params,context).pipe(
+      map((r: StrictHttpResponse<Array<TasksRm>>) => r.body as Array<TasksRm>)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `listTasksByUserTask()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listTasksByUserTask$Response(params: {
+    email: string;
+  },
+  context?: HttpContext
+
+): Observable<StrictHttpResponse<Array<TasksRm>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, TaskService.ListTasksByUserTaskPath, 'get');
+    if (params) {
+      rb.path('email', params.email, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'text/json',
+      context: context
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<TasksRm>>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `listTasksByUserTask$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listTasksByUserTask(params: {
+    email: string;
+  },
+  context?: HttpContext
+
+): Observable<Array<TasksRm>> {
+
+    return this.listTasksByUserTask$Response(params,context).pipe(
+      map((r: StrictHttpResponse<Array<TasksRm>>) => r.body as Array<TasksRm>)
     );
   }
 

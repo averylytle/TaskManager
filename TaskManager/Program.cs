@@ -7,9 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<Entities>(options =>
+
+//Connection string stored in appsettings.json
+builder.Services.AddDbContext<Entities>(options => 
+options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManager")));
+
+/*builder.Services.AddDbContext<Entities>(options =>
 	options.UseInMemoryDatabase(databaseName: "TaskManager"),
-	ServiceLifetime.Singleton);
+	ServiceLifetime.Singleton);*/
 
 builder.Services.AddControllersWithViews();
 
@@ -29,14 +34,17 @@ builder.Services.AddSwaggerGen(c =>
 	c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"] + e.ActionDescriptor.RouteValues["controller"]}");
 });
 
-builder.Services.AddSingleton<Entities>();
+builder.Services.AddScoped<Entities>();
 
 var app = builder.Build();
 
 var entities = app.Services.CreateScope().ServiceProvider.GetService<Entities>();
 
+entities.Database.EnsureCreated();
 
-IList<Tasks> tasksToSeed = new List<Tasks>
+if (!entities.Projects.Any())
+{
+	IList<Tasks> tasksToSeed = new List<Tasks>
 {
 	new ( Guid.NewGuid(),
 			"Azure Training",
@@ -67,26 +75,24 @@ IList<Tasks> tasksToSeed = new List<Tasks>
 			)
 };
 
-IList<User> users = new List<User>
+	/*IList<User> users = new List<User>
 {
 	new ("avery@gmail.com",
 		"Avery",
 		"Lytle"
 		),
 	new ("john@gmail.com",
-	    "John",
+		"John",
 		"Rajikannu")
-};
-	
+};*/
 
-
-IList<Project> projectsToSeed = new List<Project>
+	IList<Project> projectsToSeed = new List<Project>
 {
 	new (Guid.NewGuid(),
 		"House Cleaning",
 		"All the cleaning I need to do for my house",
-		users,
-		tasksToSeed
+		new List<User>(),
+		new List<Tasks>()
 	),
 	new (Guid.NewGuid(),
 	"Empty Project",
@@ -95,16 +101,8 @@ IList<Project> projectsToSeed = new List<Project>
 	new List<Tasks>())
 };
 
-//entities.Tasks.AddRange(tasksToSeed);
-entities.Projects.AddRange(projectsToSeed);
-
-entities.SaveChanges();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-	app.UseHsts();
+	entities.Projects.AddRange(projectsToSeed);
+	entities.SaveChanges();
 }
 
 
@@ -115,6 +113,14 @@ app.UseCors(builder => builder
 
 //required for SwaggerAPI
 app.UseSwagger().UseSwaggerUI();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	app.UseHsts();
+}
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

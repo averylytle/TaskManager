@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export interface TasksRm {
+  assignedEmail?: null | string;
   assignedFirstName?: null | string;
   assignedLastName?: null | string;
   description?: null | string;
