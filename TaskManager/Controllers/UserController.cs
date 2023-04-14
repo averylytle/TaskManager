@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using TaskManager.Data;
 using TaskManager.Domain.Entities;
 using TaskManager.Domain.Errors;
@@ -20,7 +21,6 @@ namespace TaskManager.Controllers
 			_entities = entities;
 		}
 
-		//private static IList<User> Users = new List<User>();
 
 		[HttpPost]
 		[ProducesResponseType(201)]
@@ -33,8 +33,15 @@ namespace TaskManager.Controllers
 			//Registering a user should maybe not be associated with Project. A user should be able to register
 			//on the website without being in a project first. Then get assigned to a project. Ugh. 
 
+			
+			//Guid is to the empty project. We will assign a new user always to the empty project
+			//workaround until I can figure out how to register a user with a null
+			var project = _entities.Projects.FirstOrDefault(p => p.ProjectId == Global.EMPTY_PROJECT);
+
+
+
 			//checking to see if a user is already registered
-			if(_entities.Users.FirstOrDefault(u => u.Email == dto.Email) != null)
+			if (_entities.Users.FirstOrDefault(u => u.Email == dto.Email) != null)
 			{
 				return Conflict(new { message = "A user with that email already exists." });
 			}
@@ -43,7 +50,11 @@ namespace TaskManager.Controllers
 			_entities.Users.Add(new User(
 				dto.Email,
 				dto.FirstName,
-				dto.LastName
+				dto.LastName,
+				//new Project() --sending new Project creates a new project and fails, we don't want a new project
+				//only a new user
+				//null sends project id as empty 000000 which fails. we want to send projectId as null
+				project
 				));
 
 			_entities.SaveChanges();
@@ -51,14 +62,9 @@ namespace TaskManager.Controllers
 			return CreatedAtAction(nameof(Find), new { email = dto.Email });
 
 
-			/*Users.Add(new User(
-				dto.Email,
-				dto.FirstName,
-				dto.LastName));
 
-			return CreatedAtAction(nameof(Find), new { email = dto.Email });*/
 		}
-		
+
 
 		//This works
 		[HttpGet("{email}")]

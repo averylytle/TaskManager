@@ -24,6 +24,107 @@ export class ProjectService extends BaseService {
   }
 
   /**
+   * Path part for operation getProjectIdsProject
+   */
+  static readonly GetProjectIdsProjectPath = '/Project/{email}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProjectIdsProject$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProjectIdsProject$Plain$Response(params: {
+    email: string;
+  },
+  context?: HttpContext
+
+): Observable<StrictHttpResponse<Array<string>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ProjectService.GetProjectIdsProjectPath, 'get');
+    if (params) {
+      rb.path('email', params.email, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: 'text/plain',
+      context: context
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<string>>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getProjectIdsProject$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProjectIdsProject$Plain(params: {
+    email: string;
+  },
+  context?: HttpContext
+
+): Observable<Array<string>> {
+
+    return this.getProjectIdsProject$Plain$Response(params,context).pipe(
+      map((r: StrictHttpResponse<Array<string>>) => r.body as Array<string>)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProjectIdsProject()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProjectIdsProject$Response(params: {
+    email: string;
+  },
+  context?: HttpContext
+
+): Observable<StrictHttpResponse<Array<string>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ProjectService.GetProjectIdsProjectPath, 'get');
+    if (params) {
+      rb.path('email', params.email, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'text/json',
+      context: context
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<string>>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getProjectIdsProject$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProjectIdsProject(params: {
+    email: string;
+  },
+  context?: HttpContext
+
+): Observable<Array<string>> {
+
+    return this.getProjectIdsProject$Response(params,context).pipe(
+      map((r: StrictHttpResponse<Array<string>>) => r.body as Array<string>)
+    );
+  }
+
+  /**
    * Path part for operation getProjectsProject
    */
   static readonly GetProjectsProjectPath = '/Project';

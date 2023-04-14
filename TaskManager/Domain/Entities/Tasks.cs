@@ -1,7 +1,10 @@
-﻿namespace TaskManager.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TaskManager.Domain.Entities
 {
 	public class Tasks //can I change this to a record?
 	{
+		[Key]
 		public Guid TaskId { get; set; }
 		//need a Project ID!!
 		public string Name { get; set; }
@@ -14,13 +17,14 @@
 		public string Priority { get; set; } = string.Empty;
 
 		public byte IsComplete { get; set; } = 0;
+		public Project Project { get; set; } = null!;
 
 		//public IList<TasksAssigned> TasksAssigned = new List<TasksAssigned>();
 
 
 		public Tasks() { }
 
-		public Tasks(Guid taskId, string name, string description, string assignedEmail, string priority, byte isComplete)
+		public Tasks(Guid taskId, string name, string description, string assignedEmail, string priority, byte isComplete, Project project)
 		{
 			TaskId = taskId;
 			Name = name;
@@ -30,6 +34,7 @@
 			AssignedEmail = assignedEmail;
 			Priority = priority;
 			IsComplete = isComplete;
+			Project = project;
 		}
 
 		public void Complete()

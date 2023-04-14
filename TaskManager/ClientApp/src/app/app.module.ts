@@ -16,6 +16,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { RegisterUserComponent } from './register-user/register-user.component';
 import { EditTaskComponent } from './edit-task/edit-task.component';
 import { ProjectsComponent } from './projects/projects.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ProjectsComponent } from './projects/projects.component';
     AddTaskComponent,
     RegisterUserComponent,
     EditTaskComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -41,7 +43,8 @@ import { ProjectsComponent } from './projects/projects.component';
       { path: 'tasks', component: TasksListComponent },
       { path: 'add-task', component: AddTaskComponent },
       { path: 'register-user', component: RegisterUserComponent },
-      { path: 'project', component: ProjectsComponent }
+      { path: 'project', component: ProjectsComponent },
+      { path: 'login', component: LoginComponent }
 
     ])
   ],

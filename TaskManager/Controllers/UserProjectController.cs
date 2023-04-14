@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.Data;
+using TaskManager.Domain.Entities;
 using TaskManager.Domain.Errors;
 using TaskManager.Dtos;
 
@@ -47,12 +48,24 @@ namespace TaskManager.Controllers
 
 			//checking if user is already assigned to project.
 
-			var error = project.AddUser(user);
+			/*var error = project.AddUser(user);
 
 			if (error is DuplicateUserError)
 			{
 				return Conflict(new { message = "The user is already assigned to this project." });
-			}
+			}*/
+
+
+			User newUser = new User(
+					user.Email,
+					user.FirstName,
+					user.LastName,
+					project
+					);
+
+			_entities.Users.Remove(user);
+
+			_entities.Users.Add(newUser);
 
 			_entities.SaveChanges();
 
@@ -82,13 +95,40 @@ namespace TaskManager.Controllers
 
 
 			//Get a list of all the tasks the user is assigned to FROM THIS PROJECT ONLY and remove the user
-			var listoftasks = project.Tasks.ToArray().Where(u => u.AssignedEmail == email);
+			//var listoftasks = project.Tasks.ToArray().Where(u => u.AssignedEmail == email);
+			var listoftasks = _entities.Tasks.ToArray().Where(u => u.AssignedEmail == email);
 
 			//null check on listoftasks
-			if (listoftasks == null)
+			if (!listoftasks.Any())
 			{
 				//if the user isn't assigned to any tasks, then just remove the user from the project
-				var error = project.RemoveUser(user);
+
+				/*
+				 You can't edit the user's projectId directly (user.Project.ProjectId = Global.EMPTY_PROJECT;)
+				so here I'm grabbing the default project and making a new user and setting the project ID to 
+				the default project. 
+				 */
+				Project defaultProject = _entities.Projects.Find(Global.EMPTY_PROJECT);
+
+				User newUser = new User(
+					user.Email,
+					user.FirstName,
+					user.LastName,
+					defaultProject
+					);
+
+				_entities.Users.Remove(user);
+
+				_entities.Users.Add(newUser);
+
+				//user.Project.ProjectId = Global.EMPTY_PROJECT;
+
+				_entities.SaveChanges();
+				//success call saying I deleted something and there's no content
+				return NoContent();
+
+
+				/*var error = project.RemoveUser(user);
 
 				if (error == null)
 				{
@@ -103,7 +143,10 @@ namespace TaskManager.Controllers
 				}
 
 				throw new Exception($"The error of type: {error.GetType().Name} " +
-				$"occurred while removing the user from project id {projectId}");
+				$"occurred while removing the user from project id {projectId}");*/
+
+
+
 			}
 			else
 			{
@@ -113,7 +156,24 @@ namespace TaskManager.Controllers
 					task.AssignedEmail = "";
 				}
 
-				//now remove the user form the project
+				Project defaultProject = _entities.Projects.Find(Global.EMPTY_PROJECT);
+
+				User newUser = new User(
+					user.Email,
+					user.FirstName,
+					user.LastName,
+					defaultProject
+					);
+
+				_entities.Users.Remove(user);
+
+				_entities.Users.Add(newUser);
+
+				_entities.SaveChanges();
+				//success call saying I deleted something and there's no content
+				return NoContent();
+
+				/*//now remove the user form the project
 				var error = project.RemoveUser(user);
 
 				if (error == null)
@@ -127,12 +187,16 @@ namespace TaskManager.Controllers
 				{
 					return NotFound("The user is not assigned to the project.");
 				}
+				
 
 				throw new Exception($"The error of type: {error.GetType().Name} " +
 				$"occurred while removing the user from project id {projectId}");
+				 */
+
+
 			}
 
-			
+
 		}
 
 

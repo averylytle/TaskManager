@@ -9,6 +9,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { ProjectTaskRm } from '../models/project-task-rm';
 import { TasksDto } from '../models/tasks-dto';
 import { TasksRm } from '../models/tasks-rm';
 
@@ -39,7 +40,7 @@ export class TaskService extends BaseService {
   },
   context?: HttpContext
 
-): Observable<StrictHttpResponse<Array<TasksRm>>> {
+): Observable<StrictHttpResponse<Array<ProjectTaskRm>>> {
 
     const rb = new RequestBuilder(this.rootUrl, TaskService.ListTasksTaskPath, 'get');
     if (params) {
@@ -53,7 +54,7 @@ export class TaskService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<TasksRm>>;
+        return r as StrictHttpResponse<Array<ProjectTaskRm>>;
       })
     );
   }
@@ -69,10 +70,10 @@ export class TaskService extends BaseService {
   },
   context?: HttpContext
 
-): Observable<Array<TasksRm>> {
+): Observable<Array<ProjectTaskRm>> {
 
     return this.listTasksTask$Plain$Response(params,context).pipe(
-      map((r: StrictHttpResponse<Array<TasksRm>>) => r.body as Array<TasksRm>)
+      map((r: StrictHttpResponse<Array<ProjectTaskRm>>) => r.body as Array<ProjectTaskRm>)
     );
   }
 
@@ -87,7 +88,7 @@ export class TaskService extends BaseService {
   },
   context?: HttpContext
 
-): Observable<StrictHttpResponse<Array<TasksRm>>> {
+): Observable<StrictHttpResponse<Array<ProjectTaskRm>>> {
 
     const rb = new RequestBuilder(this.rootUrl, TaskService.ListTasksTaskPath, 'get');
     if (params) {
@@ -101,7 +102,7 @@ export class TaskService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<TasksRm>>;
+        return r as StrictHttpResponse<Array<ProjectTaskRm>>;
       })
     );
   }
@@ -117,10 +118,10 @@ export class TaskService extends BaseService {
   },
   context?: HttpContext
 
-): Observable<Array<TasksRm>> {
+): Observable<Array<ProjectTaskRm>> {
 
     return this.listTasksTask$Response(params,context).pipe(
-      map((r: StrictHttpResponse<Array<TasksRm>>) => r.body as Array<TasksRm>)
+      map((r: StrictHttpResponse<Array<ProjectTaskRm>>) => r.body as Array<ProjectTaskRm>)
     );
   }
 

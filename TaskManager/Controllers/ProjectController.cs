@@ -52,58 +52,31 @@ namespace TaskManager.Controllers
 
 			will use project ids to list off all projects and tasks?
 
-
-			Can I get to the project with just an email?
-
-			
-
-			SELECT u.FirstName, u.LastName, *
+			SELECT *
 			FROM Projects p
-			JOIN Users u ON p.ProjectId = u.ProjectId;
+			JOIN Users u on u.ProjectId = p.ProjectId
+			WHERE u.Email = 'avery@gmail.com';
+
 
 			 */
 
-			var users = _entities.Projects.ToArray().SelectMany(u => u.Users).Where(u => u.Email == email);
-
-			var query = (from project in _entities.Projects
-						 from user in users
-						 select project.ProjectId);
-
-			//var user = _entities.Users.FirstOrDefault(u => u.Email == email);
-
-			//Grabbing all projects
-			//var projects = _entities.Projects.Select(p => p.Users.FirstOrDefault(u => u.Email == email) == user);
-
-			//var test = _entities.Projects.Select(p => p.ProjectId).Where(p => p.);
-
-			//var test2 = test.Select(p => p.Users.FirstOrDefault(p => p.Email == email));
-
-			//var guids = _entities.Projects.Select(p => p.ProjectId);
-
+			var query = (from p in _entities.Projects
+						 join u in _entities.Users
+						 on p.ProjectId equals u.Project.ProjectId
+						 where u.Email== email
+						 select new
+						 {
+							 ProjectId = p.ProjectId
+						 }).ToList();
 			
-			
+			IList<Guid> result = new List<Guid>();
 
+			foreach(var item in query)
+			{
+				result.Add(item.ProjectId);
+			}
 
-
-			/*var guids = _entities.Projects.ToArray().Select(p => p.ProjectId);
-
-			var tasks = _entities.Projects.ToArray().SelectMany(p => p.Tasks
-					.Where(t => t.AssignedEmail == email && t.IsComplete == 0))//only shows the active tasks
-					.Select(p => new TasksRm(
-						p.TaskId,
-						p.Name,
-						p.Description,
-						user.FirstName,
-						user.LastName,
-						p.AssignedEmail ?? "",
-						p.Priority,
-						p.IsComplete
-
-						));
-*/
-
-
-			return null;
+			return result;
 		}
 
 
@@ -111,6 +84,12 @@ namespace TaskManager.Controllers
 		/*
 		 Getting all the projects. Leaving the ProjectRM with Users and Tasks for now
 		to test the API. Might remove later
+
+
+		MAYBE we don't get all projects ever. What would be a use case for that? Maybe we get the projectIds 
+		based on email first, then get all the projects based on that projectId?
+
+
 		 */
 		[HttpGet]
 		[ProducesResponseType(400)]//client side error
@@ -119,16 +98,68 @@ namespace TaskManager.Controllers
 		public IEnumerable<ProjectRm> GetProjects()
 		{
 
-			var projectsTest = _entities.Projects;
+
+			var projectsList = _entities.Projects.ToArray();
+
+			var tasksList = _entities.Tasks.ToArray();
+
+			var query = projectsList.Join(
+				tasksList,
+				project => project.ProjectId,//key
+				task => task.Project.ProjectId,//primary key
+				(project, task) => new
+				{
+					//trying to get everything I need for a ProjectRm
+					project.ProjectId,
+					project.ProjectName,
+					project.ProjectDescription,
+					Users = project.Users.ToArray(),
+					Tasks = project.Tasks.ToArray()
+				}
+				).ToList();
+
+
+
+
+
+
+			//need the projectIds to call the stored procedure. For each project Id, I'll get the users
+			List<Guid> projectIds = new List<Guid>();
+
+			foreach (var project in projectsList)
+			{
+				projectIds.Add(project.ProjectId);
+			}
+
+
+
+			/*
+
+
+			 4/12/2023
+			I can send all projects, but each task has a project...
+
+
+
+			 */
+
+			//I only want to send back a userRM and TasksRm in the projectRm. How do I do that?
+
+			//
+
+			var testing = _entities.Tasks.ToArray().Select(p => p.Project);
+
+
 
 			var projects = _entities.Projects.ToArray().Select(project => new ProjectRm(
 				project.ProjectId,
 					project.ProjectName,
 					project.ProjectDescription ?? "",
-					/*null,
-					null*/
-					project.Users ?? null,
-					project.Tasks ?? null
+					null,
+					null
+					
+					/*project.Users ?? null,
+					project.Tasks ?? null*/
 				));
 
 			/*var projectRmList = _entities.Projects

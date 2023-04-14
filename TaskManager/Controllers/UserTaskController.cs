@@ -57,7 +57,7 @@ namespace TaskManager.Controllers
 			//now we can add to the task
 
 			var project = _entities.Projects.Find(projectId);
-			var task = project.Tasks.FirstOrDefault(t => t.TaskId == taskId);
+			var task = _entities.Tasks.FirstOrDefault(t => t.TaskId == taskId);
 
 			task.AssignedEmail = email;
 
@@ -89,7 +89,7 @@ namespace TaskManager.Controllers
 				return NotFound();
 			}
 
-			var task = project.Tasks.FirstOrDefault(t => t.TaskId == taskId);
+			var task = _entities.Tasks.FirstOrDefault(t => t.TaskId == taskId);
 			if (task == null) 
 			{ 
 				return NotFound(); 

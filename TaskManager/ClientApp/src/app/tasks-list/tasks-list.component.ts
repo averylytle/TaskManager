@@ -3,6 +3,7 @@ import { Time } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TaskService } from './../api/services/task.service';
 import { CompletedTasksService } from './../api/services/completed-tasks.service';
+import { ProjectService } from './../api/services/project.service';
 import { TasksDto, TasksRm } from '../api/models';
 import { AuthService } from './../auth/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -19,7 +20,11 @@ export class TasksListComponent implements OnInit {
 
   completedTasksList: TasksRm[] = []
 
-  constructor(private taskService: TaskService,
+  
+
+  constructor(
+    private projectService: ProjectService,
+    private taskService: TaskService,
     private completedService: CompletedTasksService,
     private router: Router,
     private authService: AuthService
@@ -39,6 +44,8 @@ export class TasksListComponent implements OnInit {
 
     this.completedService.listCompleteCompletedTasks({})
       .subscribe(response => this.completedTasksList = response, this.handleError)
+
+    
   }
 
    addTask(){

@@ -47,9 +47,10 @@ Users can be assigned to many projects.
 
 			//could Task task ever be null? Added null check just in case
 
+			var result = project.Tasks.FirstOrDefault(t => t.TaskId == tasks.TaskId);
 
-		    //checking if task already exists
-			if((project.Tasks.FirstOrDefault(t => t.TaskId == tasks.TaskId))!=null)
+			//checking if task already exists (project.Tasks.FirstOrDefault(t => t.TaskId == tasks.TaskId))!=null
+			if ((project.Tasks.FirstOrDefault(t => t.TaskId == tasks.TaskId)) != null)
 			{
 				return new DuplicateTaskError();
 			}

@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using TaskManager.Domain.Errors;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskManager.Controllers
 {
@@ -58,60 +59,63 @@ namespace TaskManager.Controllers
 		[ProducesResponseType(500)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
-		[ProducesResponseType(typeof(IEnumerable<TasksRm>), 200)]
-		public ActionResult<IEnumerable<TasksRm>> ListTasks(Guid projectId)
+		[ProducesResponseType(typeof(IEnumerable<ProjectTaskRm>), 200)]
+		public ActionResult<IEnumerable<ProjectTaskRm>> ListTasks(Guid projectId)
 		{
 
-/*
- 
-			BROKEN - won't return tasks because the userlist is empty
- 
- */
-			//this is the issue. should be first or default 
-			var project = _entities.Projects.Find(projectId);
+			/*
 
-			//I need to get the users to relay back the user information 
+						BROKEN - won't return tasks because the userlist is empty
 
-			if (project == null)
-			{
-				return NotFound();
-			}
+			 */
 
-			var tasksList = project.Tasks.ToArray();
-
-			var usersList = project.Users.ToArray();
-
-			var query = tasksList.Join(
-				usersList,
-				task => task.AssignedEmail,//key
-				user => user.Email,//primary key
-				(task, user) => new 
-				{
-					task.TaskId,
-					task.Name,
-					task.Description,
-					user.FirstName,
-					user.LastName,
-					task.AssignedEmail,
-					task.Priority,
-					task.IsComplete
-				}
-				).ToList();
+			var query = (from p in _entities.Projects
+						 join t in _entities.Tasks
+						 on p.ProjectId equals t.Project.ProjectId
+						 join u in _entities.Users
+						 on p.ProjectId equals u.Project.ProjectId
+						 select new
+						 {
+							 ProjectName = p.ProjectName,
+							 ProjectDescription = p.ProjectDescription,
+							 TaskId = t.TaskId,
+							 Name = t.Name,
+							 Description = t.Description,
+							 AssignedFirstName = u.FirstName, 
+							 AssignedLastName = u.LastName,
+							 AssignedEmail = t.AssignedEmail,
+							 Priority = t.Priority,
+							 IsComplete = t.IsComplete
+						 }).ToList();
 
 
 			//Converting query to a TasksRm
-
 			List<TasksRm> tasksRm = new List<TasksRm>();
-			
-			foreach(var task in query) 
+
+			List<ProjectTaskRm> projectTasksRm = new List<ProjectTaskRm>();
+
+			/*foreach (var task in query)
 			{
 				tasksRm.Add(new TasksRm(
-					task.TaskId, task.Name, task.Description, task.FirstName, task.LastName, task.AssignedEmail,
+					task.TaskId, task.Name, task.Description, task.AssignedFirstName, task.AssignedLastName, task.AssignedEmail,
 					task.Priority, task.IsComplete));
+			}*/
+
+			foreach (var task in query)
+			{
+				projectTasksRm.Add(new ProjectTaskRm(
+					task.ProjectName, 
+					task.ProjectDescription,
+					task.Name, 
+					task.Description, 
+					task.AssignedFirstName, 
+					task.AssignedLastName, 
+					task.AssignedEmail,
+					task.Priority,
+					task.IsComplete));
 			}
 
-
-			return Ok(tasksRm);
+			return Ok(projectTasksRm);
 			
 		}
 
@@ -130,32 +134,43 @@ namespace TaskManager.Controllers
 				var user = _entities.Users.FirstOrDefault(u => u.Email == email);
 
 				//grabbing all the tasks assigned to the user, using var user to send firstname and lastname back
-				var tasks = _entities.Projects.ToArray().SelectMany(p => p.Tasks
-					.Where(t => t.AssignedEmail == email && t.IsComplete == 0))//only shows the active tasks
-					.Select(p => new TasksRm(
-						p.TaskId,
-						p.Name,
-						p.Description,
-						user.FirstName,
-						user.LastName,
-						p.AssignedEmail ?? "",
-						p.Priority,
-						p.IsComplete
 
-						));
+				var query = (from t in _entities.Tasks
+								join u in _entities.Users
+								on t.AssignedEmail equals u.Email
+								select new
+								{
+									TaskId = t.TaskId,
+									Name = t.Name,
+									Description = t.Description,
+									AssignedFirstName = u.FirstName,
+									AssignedLastName = u.LastName,
+									AssignedEmail = t.AssignedEmail,
+									Priority = t.Priority,
+									IsComplete = t.IsComplete
+								}).ToList();
 
+				//Converting query to a TasksRm
+				List<TasksRm> tasksRm = new List<TasksRm>();
+
+				foreach (var task in query)
+				{
+					tasksRm.Add(new TasksRm(
+						task.TaskId, task.Name, task.Description, task.AssignedFirstName, task.AssignedLastName, task.AssignedEmail,
+						task.Priority, task.IsComplete));
+				}
 
 				if (user == null)
 				{
 					return NotFound($"The user with email {email} is not registered.");
 				}
 
-				if (!tasks.Any())//if it is false
+				if (!tasksRm.Any())//if it is false
 				{
 					return NotFound("No tasks found for that user.");
 				}
 
-				return Ok(tasks);
+				return Ok(tasksRm);
 			}
 			catch (ArgumentNullException ex)
 			{
@@ -183,7 +198,7 @@ namespace TaskManager.Controllers
 			if (project == null) { return NotFound("The project id is invalid."); }
 
 
-			//task assignment is left blank to keep tasks about tasks, not users. 
+			/*//task assignment is left blank to keep tasks about tasks, not users. 
 			//will add a function to assign a user to a task
 			var error = project.AddTask(new Tasks(
 				dto.TaskId,
@@ -191,22 +206,33 @@ namespace TaskManager.Controllers
 				dto.Description ?? "",
 				"",//no assigned email because user assignment takes place in a different location
 				dto.Priority ?? "",
-				0));
-
-
+				0,
+				project));
 
 			if (error is DuplicateTaskError)
 			{
 				//eventually log the error 
-				return Conflict(new {message = "A Task with that taskId already exists." });
-			}
-			
-			/*if (error is UserNotAssignedError)
-			{
-				return Conflict(new { message = "The user is not assigned to the project yet." });
+				return Conflict(new { message = "A Task with that taskId already exists." });
 			}*/
+			try 
+			{
+				_entities.Tasks.Add(new Tasks(
+				dto.TaskId,
+				dto.Name,
+				dto.Description ?? "",
+				"",//no assigned email because user assignment takes place in a different location
+				dto.Priority ?? "",
+				0,
+				project));
 
-			_entities.SaveChanges();
+				_entities.SaveChanges();
+
+			}
+			catch(DbUpdateException ex)
+			{
+				return Conflict(ex.Message);
+			}
+
 
 			return CreatedAtAction("Task Created", new { id = dto.TaskId });
 
@@ -235,7 +261,7 @@ namespace TaskManager.Controllers
 				return NotFound();
 			}
 
-			var task = project.Tasks.FirstOrDefault(t => t.TaskId == taskId);
+			var task = _entities.Tasks.Find(taskId);
 
 			//var task = _entities.Tasks.Find(dto.TaskId);
 			/*var task = _entities.Tasks.Find(taskId);*/
@@ -275,8 +301,8 @@ namespace TaskManager.Controllers
 
 
 			var project = _entities.Projects.Find(dto.ProjectId);
-
-			var task = project.Tasks.FirstOrDefault(t => t.TaskId == dto.TaskId);
+			//what's the difference between find and first or default
+			var task = _entities.Tasks.FirstOrDefault(t => t.TaskId == dto.TaskId); 
 
 		
 			if (task == null)

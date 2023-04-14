@@ -4,6 +4,7 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { CompletedTasksService } from './services/completed-tasks.service';
 import { ProjectService } from './services/project.service';
 import { TaskService } from './services/task.service';
 import { UserService } from './services/user.service';
@@ -18,6 +19,7 @@ import { UserTaskService } from './services/user-task.service';
   exports: [],
   declarations: [],
   providers: [
+    CompletedTasksService,
     ProjectService,
     TaskService,
     UserService,

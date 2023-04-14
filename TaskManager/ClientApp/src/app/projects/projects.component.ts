@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from './../api/services/project.service';
-import { TasksDto, TasksRm, ProjectRm } from '../api/models';
+import { TaskService } from './../api/services/task.service';
+import { TasksDto, TasksRm, ProjectRm, ProjectTaskRm } from '../api/models';
 import { AuthService } from './../auth/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -13,8 +14,13 @@ export class ProjectsComponent implements OnInit {
 
   projectList: ProjectRm[] = []
 
+  projectTaskList: ProjectTaskRm[] = []
+
+  projectId: string[] = [];
+
   constructor(private projectService: ProjectService,
     private router: Router,
+    private taskService: TaskService,
     private authService: AuthService) { }
 
   ngOnInit(): void {
@@ -23,6 +29,15 @@ export class ProjectsComponent implements OnInit {
 
     this.projectService.getProjectsProject({})
       .subscribe(response => this.projectList = response, this.handleError)
+
+
+
+    //this doesn't work yet. Not sure why. Trying to grab the project Id then pass it to get projectTaskRms'
+    this.projectService.getProjectIdsProject({ email: this.authService.currentUser?.email ?? '' })
+      .subscribe(response => this.projectId = response, this.handleError)
+
+    this.taskService.listTasksTask({ projectId: this.projectId[0] ?? '' })
+      .subscribe(response => this.projectTaskList = response, this.handleError)
 
   }
 

@@ -2,6 +2,7 @@ using Microsoft.OpenApi.Models;
 using TaskManager.Data;
 using TaskManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,11 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManager")));
 	options.UseInMemoryDatabase(databaseName: "TaskManager"),
 	ServiceLifetime.Singleton);*/
 
-builder.Services.AddControllersWithViews();
+//added this trying to solve GET PROJECTS error 'System.Text.Json.JsonException: A possible object cycle was detected.'
+builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+{
+	options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 //required for SwaggerAPI and OpenAPI (RESTful API) so our client app can communicate with the server
 builder.Services.AddSwaggerGen(c =>
@@ -44,13 +49,13 @@ entities.Database.EnsureCreated();
 
 if (!entities.Projects.Any())
 {
-	IList<Tasks> tasksToSeed = new List<Tasks>
+	/*IList<Tasks> tasksToSeed = new List<Tasks>
 {
 	new ( Guid.NewGuid(),
 			"Azure Training",
 			"Complete all the azure training required",
-/*			"Avery",
-			"Lytle",*/
+*//*			"Avery",
+			"Lytle",*//*
 			"avery@gmail.com",
 			"Low",
 			0
@@ -58,8 +63,8 @@ if (!entities.Projects.Any())
 		new ( Guid.NewGuid(),
 			"Chores",
 			"Do all my house chores",
-/*			"Avery",
-			"Lytle",*/
+*//*			"Avery",
+			"Lytle",*//*
 			"avery@gmail.com",
 			"Medium",
 			0
@@ -67,13 +72,13 @@ if (!entities.Projects.Any())
 		new ( Guid.NewGuid(),
 			"C# stuff",
 			"He's really good at C#!",
-/*			"John",
-			"Rajikannu",*/
+*//*			"John",
+			"Rajikannu",*//*
 			"john@gmail.com",
 			"Medium",
 			0
 			)
-};
+};*/
 
 	/*IList<User> users = new List<User>
 {
