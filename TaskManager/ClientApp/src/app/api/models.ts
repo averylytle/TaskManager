@@ -4,6 +4,7 @@ export { Project } from './models/project';
 export { ProjectDto } from './models/project-dto';
 export { ProjectRm } from './models/project-rm';
 export { ProjectTaskRm } from './models/project-task-rm';
+export { ProjectUser } from './models/project-user';
 export { Tasks } from './models/tasks';
 export { TasksDto } from './models/tasks-dto';
 export { TasksRm } from './models/tasks-rm';

@@ -14,20 +14,22 @@ Users can be assigned to many projects.
 		public string ProjectName { get; set; }
 		public string? ProjectDescription { get; set; }
 		public IList<User>? Users { get; set; } = new List<User>();
+		public IList<ProjectUser>? ProjectUsers { get; set; } = new List<ProjectUser>();
 		public IList<Tasks>? Tasks { get; set; } = new List<Tasks>();
 
 		public Project() { }
 
-		public Project(Guid projectId, string projectName, string projectDescription, IList<User>? users, IList<Tasks>? tasks)
+		public Project(Guid projectId, string projectName, string projectDescription, IList<User>? users, IList<ProjectUser>? projectUsers, IList<Tasks>? tasks)
 		{
 			ProjectId = projectId;
 			ProjectName = projectName;
 			ProjectDescription = projectDescription;
 			Users = users;
+			ProjectUsers = projectUsers;
 			Tasks = tasks;
 		}
 
-		internal object? GetProjectId(string email)
+		/*internal object? GetProjectId(string email)
 		{
 			var project = this;
 
@@ -39,7 +41,7 @@ Users can be assigned to many projects.
 			}
 
 			return new UserNotAssignedError();
-		}
+		}*/
 
 		internal object? AddTask(Tasks tasks)
 		{
@@ -60,7 +62,7 @@ Users can be assigned to many projects.
 			return null;
 		}
 
-		internal object? AddUser(User user) 
+		internal object? AddUser(User user)
 		{
 			var project = this;
 
@@ -94,7 +96,7 @@ Users can be assigned to many projects.
 			return null;
 		}*/
 
-		internal object? RemoveUser(User user)//redesign with an error
+		/*internal object? RemoveUser(User user)//redesign with an error
 		{
 			var project = this;
 
@@ -108,6 +110,6 @@ Users can be assigned to many projects.
 				return new UserNotAssignedError();
 			}
 			return null;
-		}
+		}*/
 	}
 }

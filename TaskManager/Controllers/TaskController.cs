@@ -32,6 +32,8 @@ namespace TaskManager.Controllers
 
 
 
+
+
 		/*//Might not need this, Project Controller will take care of it?
 		[ProducesResponseType(400)]//client side error
 		[ProducesResponseType(500)]//server side error. database connection string failure 
@@ -54,7 +56,7 @@ namespace TaskManager.Controllers
 			return tasksRmList;
 		}*/
 
-		
+
 		[HttpGet]
 		[ProducesResponseType(500)]
 		[ProducesResponseType(400)]
@@ -63,17 +65,15 @@ namespace TaskManager.Controllers
 		public ActionResult<IEnumerable<ProjectTaskRm>> ListTasks(Guid projectId)
 		{
 
-			/*
 
-						BROKEN - won't return tasks because the userlist is empty
-
-			 */
 
 			var query = (from p in _entities.Projects
 						 join t in _entities.Tasks
 						 on p.ProjectId equals t.Project.ProjectId
+						 join pu in _entities.ProjectUser
+						 on p.ProjectId equals pu.Project.ProjectId
 						 join u in _entities.Users
-						 on p.ProjectId equals u.Project.ProjectId
+						 on pu.User.Email equals u.Email
 						 where p.ProjectId == projectId
 						 select new
 						 {
@@ -82,7 +82,7 @@ namespace TaskManager.Controllers
 							 TaskId = t.TaskId,
 							 Name = t.Name,
 							 Description = t.Description,
-							 AssignedFirstName = u.FirstName, 
+							 AssignedFirstName = u.FirstName,
 							 AssignedLastName = u.LastName,
 							 AssignedEmail = t.AssignedEmail,
 							 Priority = t.Priority,
@@ -95,30 +95,34 @@ namespace TaskManager.Controllers
 
 			List<ProjectTaskRm> projectTasksRm = new List<ProjectTaskRm>();
 
-			/*foreach (var task in query)
+			foreach (var task in query)
 			{
 				tasksRm.Add(new TasksRm(
 					task.TaskId, task.Name, task.Description, task.AssignedFirstName, task.AssignedLastName, task.AssignedEmail,
 					task.Priority, task.IsComplete));
-			}*/
+			}
 
 			foreach (var task in query)
 			{
 				projectTasksRm.Add(new ProjectTaskRm(
-					task.ProjectName, 
+					task.ProjectName,
 					task.ProjectDescription,
-					task.Name, 
-					task.Description, 
-					task.AssignedFirstName, 
-					task.AssignedLastName, 
+					task.Name,
+					task.Description,
+					task.AssignedFirstName,
+					task.AssignedLastName,
 					task.AssignedEmail,
 					task.Priority,
 					task.IsComplete));
 			}
 
 			return Ok(projectTasksRm);
-			
+
 		}
+
+
+
+
 
 		//was originally in project controller but now in task controller
 		[HttpGet("{email}")]

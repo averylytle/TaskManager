@@ -8,17 +8,19 @@ namespace TaskManager.Domain.Entities
 		public string Email { get; set; }//primary key
 		public string FirstName { get; set; } = string.Empty;
 		public string LastName { get; set; } = string.Empty;
-		public Project Project { get; set; } = null!;
+		public IList<Project> Projects { get; set; } = null!;
+		public IList<ProjectUser>? ProjectUsers { get; set; } = new List<ProjectUser>();
 
 		public User() { }
 
 		//, Project project
-		public User(string email, string firstName, string lastName, Project project)
+		public User(string email, string firstName, string lastName, IList<Project>? projects, IList<ProjectUser>? projectUsers)
 		{
 			Email = email;
 			FirstName = firstName;
 			LastName = lastName;
-			Project = project;
+			Projects = projects;
+			ProjectUsers = projectUsers;
 		}
 	}
 }

@@ -3,7 +3,7 @@
 namespace TaskManager.Dtos
 {
 	public record ProjectDto(
-		[Required] Guid ProjectId,
+		//[Required] Guid ProjectId, removed because the system creates a new GUID, not the front-end
 		[Required] string ProjectName,
 		string Description
 

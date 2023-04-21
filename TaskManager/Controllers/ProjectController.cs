@@ -46,23 +46,12 @@ namespace TaskManager.Controllers
 		[ProducesResponseType(typeof(IEnumerable<Guid>), 200)]
 		public IEnumerable<Guid> GetProjectIds(string email)
 		{
-			/*
-			 What I'm trying to do is get all the project Ids associated to the user. If the user is in two projects,
-			two project ids
-
-			will use project ids to list off all projects and tasks?
-
-			SELECT *
-			FROM Projects p
-			JOIN Users u on u.ProjectId = p.ProjectId
-			WHERE u.Email = 'avery@gmail.com';
-
-
-			 */
-
+			
 			var query = (from p in _entities.Projects
+						 join pu in _entities.ProjectUser
+						 on p.ProjectId equals pu.Project.ProjectId
 						 join u in _entities.Users
-						 on p.ProjectId equals u.Project.ProjectId
+						 on pu.User.Email equals u.Email
 						 where u.Email== email
 						 select new
 						 {
@@ -194,6 +183,7 @@ namespace TaskManager.Controllers
 				dto.ProjectName,
 				dto.Description,
 				new List<User>(),
+				new List<ProjectUser>(),
 				new List<Tasks>()
 				));
 			}
@@ -206,11 +196,11 @@ namespace TaskManager.Controllers
 
 			_entities.SaveChanges();
 
-			return CreatedAtAction("Project Created", new { id = dto.ProjectId });
+			return CreatedAtAction("Project Created", new { id = projectGuid });
 
 		}
 
-		
+
 
 	}
 }

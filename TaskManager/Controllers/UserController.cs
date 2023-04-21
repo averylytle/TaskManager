@@ -33,7 +33,7 @@ namespace TaskManager.Controllers
 			//Registering a user should maybe not be associated with Project. A user should be able to register
 			//on the website without being in a project first. Then get assigned to a project. Ugh. 
 
-			
+
 			//Guid is to the empty project. We will assign a new user always to the empty project
 			//workaround until I can figure out how to register a user with a null
 			var project = _entities.Projects.FirstOrDefault(p => p.ProjectId == Global.EMPTY_PROJECT);
@@ -46,22 +46,17 @@ namespace TaskManager.Controllers
 				return Conflict(new { message = "A user with that email already exists." });
 			}
 
-
 			_entities.Users.Add(new User(
 				dto.Email,
 				dto.FirstName,
 				dto.LastName,
-				//new Project() --sending new Project creates a new project and fails, we don't want a new project
-				//only a new user
-				//null sends project id as empty 000000 which fails. we want to send projectId as null
-				project
+				new List<Project>(),//must add these empty lists for EF many to many relationship
+				new List<ProjectUser>()
 				));
 
 			_entities.SaveChanges();
 
 			return CreatedAtAction(nameof(Find), new { email = dto.Email });
-
-
 
 		}
 

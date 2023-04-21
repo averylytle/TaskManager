@@ -11,11 +11,11 @@
 <div>
   <h2>User-Assigned Projects</h2>
 </div>
-<div>
+<div *ngFor="let project of projectTaskList">
   <!--*ngFor="let project of projectTaskList"-->
 
-  <!--<p>{{project.projectName}}</p>-->
-  <span> {{projectTaskList[0].projectName}}</span>
+  <p>{{project.projectName}}</p>
+  <!--<span> {{projectTaskList[0].projectName}}</span>-->
 </div>
 
 <div>

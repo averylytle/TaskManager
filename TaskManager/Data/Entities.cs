@@ -10,6 +10,7 @@ namespace TaskManager.Data
 
 		public DbSet<User> Users => Set<User>();
 		public DbSet<Project> Projects => Set<Project>();
+		public DbSet<ProjectUser> ProjectUser => Set<ProjectUser>();
 		public DbSet<Tasks> Tasks => Set<Tasks>();
 
 		public Entities(DbContextOptions<Entities> options) : base(options)
@@ -28,7 +29,11 @@ namespace TaskManager.Data
 
 
 			modelBuilder.Entity<Project>().HasMany(p => p.Tasks);
-			modelBuilder.Entity<Project>().HasMany(p => p.Users);
+
+			modelBuilder.Entity<Project>()
+				.HasMany(p => p.Users)
+				.WithMany(e =>e.Projects)
+				.UsingEntity<ProjectUser>();
 
 			//setting up the S
 			//modelBuilder.Entity<Project>().OwnsMany(p => p.Tasks);

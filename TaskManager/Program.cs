@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Connection string stored in appsettings.json
 builder.Services.AddDbContext<Entities>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManager")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManagerProjectUser")));
 
 /*builder.Services.AddDbContext<Entities>(options =>
 	options.UseInMemoryDatabase(databaseName: "TaskManager"),
@@ -97,12 +97,14 @@ if (!entities.Projects.Any())
 		"House Cleaning",
 		"All the cleaning I need to do for my house",
 		new List<User>(),
+		new List<ProjectUser>(),
 		new List<Tasks>()
 	),
 	new (Guid.NewGuid(),
 	"Empty Project",
 	"Project without any users or tasks assigned yet.",
 	new List<User>(),
+	new List<ProjectUser>(),
 	new List<Tasks>())
 };
 
