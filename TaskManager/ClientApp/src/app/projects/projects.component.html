@@ -1,0 +1,55 @@
+<div>
+
+  <button (click)="createProject()" type="button" class="btn btn-primary">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+    </svg>  Create Project
+  </button>
+</div>
+
+
+<div>
+  <h2>User-Assigned Projects</h2>
+</div>
+<div>
+  <!--*ngFor="let project of projectTaskList"-->
+
+  <!--<p>{{project.projectName}}</p>-->
+  <span> {{projectTaskList[0].projectName}}</span>
+</div>
+
+<div>
+  <h2>All Projects</h2>
+</div>
+<div *ngFor="let project of projectList">
+  <!--*ngFor="let project of projectTaskList"-->
+  <p>{{project.projectName}}</p>
+</div>
+
+
+<div class="accordion">
+  <br />
+  <h3>Active Tasks</h3>
+  <table class="table table-hover" data-resizable="true">
+    <thead>
+      <tr id="task-table-headers">
+        <th scope="col">Task Name</th>
+        <th scope="col">Description</th>
+        <!--<th scope="col">Due Date</th>-->
+        <!--<th scope="col">Assigned</th>-->
+        <th scope="col">Priority</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let project of projectTaskList">
+        <tr>
+          <!-- *ngFor="let task of project.tasks"-->
+          <td>{{project.taskName}}</td>
+          <td>{{project.taskDescription}}</td>
+          <td>{{project.priority}}</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+</div>
