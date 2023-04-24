@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Connection string stored in appsettings.json
 builder.Services.AddDbContext<Entities>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManagerProjectUser")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("TaskManager")));
 
 /*builder.Services.AddDbContext<Entities>(options =>
 	options.UseInMemoryDatabase(databaseName: "TaskManager"),

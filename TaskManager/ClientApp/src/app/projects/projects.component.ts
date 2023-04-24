@@ -4,8 +4,11 @@ import { TaskService } from './../api/services/task.service';
 import { TasksDto, TasksRm, ProjectRm, ProjectTaskRm } from '../api/models';
 import { AuthService } from './../auth/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { from, Observable, of } from 'rxjs';
-import { mergeMap, map, delay, mergeAll } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
+
+import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { TestingDialogComponent } from '../testing-dialog/testing-dialog.component';
+
 
 @Component({
   selector: 'app-projects',
@@ -25,7 +28,8 @@ export class ProjectsComponent implements OnInit {
   constructor(private projectService: ProjectService,
     private router: Router,
     private taskService: TaskService,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private dialog: MatDialog  ) { }
 
   ngOnInit(): void {
     if (!this.authService.currentUser?.email)
@@ -48,8 +52,33 @@ export class ProjectsComponent implements OnInit {
    
   }
 
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    /*dialogConfig.data = {
+      id: 1,
+      title: 'Angular For Beginners'
+    };*/
+
+    this.dialog.open(TestingDialogComponent, dialogConfig);
+
+    /*const dialogRef = this.dialog.open(TestingDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(
+      data => console.log("dialog output:", data)
+    );*/
+  }
+
+
   createProject() {
     this.router.navigate(['/create-project'])
+  }
+
+  assignUser() {
+
   }
 
   private handleError(err: any) {

@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ProjectService } from './../api/services/project.service';
 import { AuthService } from './../auth/auth.service';
-import { Router} from '@angular/router';
+import { Router } from '@angular/router';
+
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 @Component({
   selector: 'app-create-project',

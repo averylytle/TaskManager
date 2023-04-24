@@ -9,15 +9,17 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { TasksListComponent } from './tasks-list/tasks-list.component';
 import { AddTaskComponent } from './add-task/add-task.component';
-//used for mat-form-field datepicker stuff
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatNativeDateModule } from '@angular/material/core';
+//dialog 
+import { MatDialogModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 import { RegisterUserComponent } from './register-user/register-user.component';
 import { EditTaskComponent } from './edit-task/edit-task.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { LoginComponent } from './login/login.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
+import { TestingDialogComponent } from './testing-dialog/testing-dialog.component';
 
 @NgModule({
   declarations: [
@@ -30,16 +32,16 @@ import { CreateProjectComponent } from './create-project/create-project.componen
     EditTaskComponent,
     ProjectsComponent,
     LoginComponent,
-    CreateProjectComponent
+    CreateProjectComponent,
+    TestingDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    MatInputModule,
-    MatNativeDateModule,
-    MatFormFieldModule,
+    MatDialogModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'tasks', component: TasksListComponent },
@@ -54,6 +56,7 @@ import { CreateProjectComponent } from './create-project/create-project.componen
   providers: [
     //TasksListComponent
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [TestingDialogComponent]
 })
 export class AppModule { }
