@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 @Component({
@@ -8,23 +8,15 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
   styleUrls: ['./testing-dialog.component.css']
 })
 export class TestingDialogComponent implements OnInit {
-  form: FormGroup | undefined;
-  description: string | undefined;
 
 
   constructor(private fb: FormBuilder,
     private dialogRef: MatDialogRef<TestingDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { description: string }) {
+    @Inject(MAT_DIALOG_DATA) public data: { description: string }) { }
 
-    this.description = data.description;
-
-  }
 
   ngOnInit(): void {
-    this.form = this.fb.group({
-      description: [this.description, []]
-
-    });
+   
   }
 
   /*save() {
