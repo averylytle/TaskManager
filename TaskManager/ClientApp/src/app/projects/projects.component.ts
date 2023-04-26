@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ProjectService } from './../api/services/project.service';
 import { TaskService } from './../api/services/task.service';
 import { TasksDto, TasksRm, ProjectRm, ProjectTaskRm } from '../api/models';
@@ -24,6 +24,8 @@ export class ProjectsComponent implements OnInit {
   projectIds: string[] = [];
 
   hardCodedId: string = "3FA85F64-5717-4562-B3FC-2C963F66AFA6";
+
+  //animal!: string;
 
   constructor(private projectService: ProjectService,
     private router: Router,
@@ -54,6 +56,18 @@ export class ProjectsComponent implements OnInit {
 
   openDialog() {
 
+
+    /*const dialogRef = this.dialog.open(TestingDialogComponent, {
+      data: { animal: this.animal }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("The dialog was closed");
+      this.animal = result;
+    })
+*/
+
+
     const dialogRef = this.dialog.open(TestingDialogComponent, {
       data: { title: "Hello, World!"}
       });
@@ -69,8 +83,8 @@ export class ProjectsComponent implements OnInit {
     dialogConfig.autoFocus = true;
 
 
-    this.dialog.open(TestingDialogComponent, dialogConfig);*/
-
+    this.dialog.open(TestingDialogComponent, dialogConfig);
+*/
    
   }
 

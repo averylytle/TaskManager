@@ -20,6 +20,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { LoginComponent } from './login/login.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { TestingDialogComponent } from './testing-dialog/testing-dialog.component';
+import { EditinplaceComponent } from './editinplace/editinplace.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { TestingDialogComponent } from './testing-dialog/testing-dialog.componen
     ProjectsComponent,
     LoginComponent,
     CreateProjectComponent,
-    TestingDialogComponent
+    TestingDialogComponent,
+    EditinplaceComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -49,7 +51,8 @@ import { TestingDialogComponent } from './testing-dialog/testing-dialog.componen
       { path: 'register-user', component: RegisterUserComponent },
       { path: 'project', component: ProjectsComponent },
       { path: 'create-project', component: CreateProjectComponent },
-      { path: 'login', component: LoginComponent }
+      { path: 'login', component: LoginComponent },
+      { path: 'editinplace', component: EditinplaceComponent }
 
     ])
   ],

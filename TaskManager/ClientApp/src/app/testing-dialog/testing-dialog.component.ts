@@ -11,8 +11,8 @@ export class TestingDialogComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder,
-    private dialogRef: MatDialogRef<TestingDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    public dialogRef: MatDialogRef<TestingDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: {title: string}) { }
 
 
   ngOnInit(): void {
@@ -21,6 +21,6 @@ export class TestingDialogComponent implements OnInit {
 
   close() {
 
-    this.dialogRef.close()
+    this.dialogRef.close();
   }
 }
