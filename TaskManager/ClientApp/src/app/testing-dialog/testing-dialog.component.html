@@ -1,27 +1,19 @@
-<!--<h2 mat-dialog-title>{{description}}</h2>
+<h2 mat-dialog-title>{{data?.title}}</h2>
 
-<mat-dialog-content [formGroup]="form">
+<div mat-dialog-content>
+  <p>lorem ipsum</p>
+</div>
 
-  <mat-form-field>
-    <input matInput
-           placeholder="Course Description"
-           formControlName="description">
-  </mat-form-field>
-  ....
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="'CLOSE'">Confirm</button>
+</div>
 
-</mat-dialog-content>
-
-<mat-dialog-actions>
-  <button class="mat-raised-button" (click)="close()">Close</button>-->
-<!--<button class="mat-raised-button mat-primary" (click)="save()">Save</button>-->
-<!--</mat-dialog-actions>-->
-
-
-
-<h1 mat-dialog-title>Hello There</h1>
+<!--<h1 mat-dialog-title>Hello There</h1>
 <div mat-dialog-content>
   <p>This Is a Simple Dialog</p>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="close()">Close</button>
-</div>
+</div>-->
+

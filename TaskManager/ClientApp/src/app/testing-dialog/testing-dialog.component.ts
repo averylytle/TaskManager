@@ -12,16 +12,12 @@ export class TestingDialogComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private dialogRef: MatDialogRef<TestingDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { description: string }) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
 
   ngOnInit(): void {
    
   }
-
-  /*save() {
-    this.dialogRef.close(this.form.value ?? ''); 
-  }*/
 
   close() {
 

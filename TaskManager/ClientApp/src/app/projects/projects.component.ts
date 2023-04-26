@@ -53,23 +53,25 @@ export class ProjectsComponent implements OnInit {
   }
 
   openDialog() {
-    const dialogConfig = new MatDialogConfig();
+
+    const dialogRef = this.dialog.open(TestingDialogComponent, {
+      data: { title: "Hello, World!"}
+      });
+
+    dialogRef.afterClosed().subscribe(
+    result => console.log("Dialog Result", result)
+    );
+    
+
+    /*const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
-    /*dialogConfig.data = {
-      id: 1,
-      title: 'Angular For Beginners'
-    };*/
 
-    this.dialog.open(TestingDialogComponent, dialogConfig);
+    this.dialog.open(TestingDialogComponent, dialogConfig);*/
 
-    /*const dialogRef = this.dialog.open(TestingDialogComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(
-      data => console.log("dialog output:", data)
-    );*/
+   
   }
 
 
