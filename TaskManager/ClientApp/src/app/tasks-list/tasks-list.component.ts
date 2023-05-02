@@ -66,6 +66,9 @@ export class TasksListComponent implements OnInit {
       taskId: this.tasksList[0].taskId
     };*/
 
+
+
+    //why am I using a read model here? shouldn't it be a DTO?
     const rm: TasksRm = {
       taskId: this.tasksList[0].taskId
     }

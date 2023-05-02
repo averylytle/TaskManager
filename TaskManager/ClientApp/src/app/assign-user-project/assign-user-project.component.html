@@ -1,0 +1,72 @@
+<!--I want to implement a drop down to select from all the projects
+
+  in this dropdown, in the backend once selected, I want to retrieve the projectId to pass to
+  the user-project.service-->
+
+<p>assign-user-project works!</p>
+
+
+<h4>mat select</h4>
+<div>
+  <mat-form-field appearance="fill">
+    <mat-label>Project</mat-label>
+    <mat-select [formControl]="projectRmControl" (selectionChange)="getId($event.value)">
+      <!-- required-->
+      <mat-option>--</mat-option>
+      <mat-option *ngFor="let project of projectList" [value]="project.projectId">
+        {{project.projectName}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="projectRmControl.hasError('required')">Please choose a project</mat-error>
+    <mat-hint>{{projectRmControl.value?.projectId}}</mat-hint>
+  </mat-form-field>
+
+</div>
+
+
+<!--<div>
+  <mat-form-field appearance="fill">
+    <mat-label>Users</mat-label>
+    <mat-select [formControl]="userRmControl" (selectionChange)="getEmail($event.value)">-->
+      <!-- (selectionChange)="getId($event.value)"-->
+      <!--<mat-option>--</mat-option>
+      <mat-option *ngFor="let user of userList" [value]="user.email">
+        {{user.firstName}} {{user.lastName}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="userRmControl.hasError('required')">Please choose a user</mat-error>
+    <mat-hint>{{userRmControl.value?.email}}</mat-hint>
+  </mat-form-field>
+
+</div>
+<div>
+  <button (click)="assignUser()" type="submit" class="btn btn-primary">Submit <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+</div>-->
+
+
+<form [formGroup]="form">
+  <div class="container d-grid gap-3" style="max-width: 700px;">
+
+    <div class="form-floating">
+      <input formControlName="email" placeholder="Email" class="form-control" type="text" />
+      <label for="email">Email</label>
+
+      <div class="invalid-feedback d-block" *ngIf="form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched)">
+        <div *ngIf="form.controls.email.errors">
+          Email is invalid
+        </div>
+      </div>
+
+
+
+    </div>
+    
+    <div class="d-flex justify-content-center center">
+      <button (click)="assignUser()" type="submit" class="btn btn-primary">Submit <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+    </div>
+  </div>
+</form>
+
+
+
+

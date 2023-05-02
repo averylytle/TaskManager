@@ -56,14 +56,40 @@ namespace TaskManager.Controllers
 
 			_entities.SaveChanges();
 
-			return CreatedAtAction(nameof(Find), new { email = dto.Email });
+			return CreatedAtAction(nameof(GetUserDetails), new { email = dto.Email });
 
+		}
+
+
+
+		//all users
+		[HttpGet]
+		[ProducesResponseType(500)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		[ProducesResponseType(typeof(IEnumerable<UserRm>), 200)]
+		public ActionResult<IEnumerable<UserRm>> FindAllUsers()
+		{
+
+			var users = _entities.Users;
+
+			IList<UserRm> usersRm = new List<UserRm>();
+
+			foreach(var user in users)
+			{
+				usersRm.Add(new UserRm(
+					user.Email
+					,user.FirstName
+					, user.LastName));
+			}
+
+			return Ok(usersRm);
 		}
 
 
 		//This works
 		[HttpGet("{email}")]
-		public ActionResult<UserRm> Find(string email)
+		public ActionResult<UserRm> GetUserDetails(string email)
 		{
 			var user = _entities.Users.FirstOrDefault(u => u.Email == email);
 
@@ -79,6 +105,8 @@ namespace TaskManager.Controllers
 		}
 
 		
+
+
 
 		[HttpPut("{email}")]
 		public IActionResult Edit(string email)

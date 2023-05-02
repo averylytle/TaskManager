@@ -33,7 +33,7 @@ export class RegisterUserComponent implements OnInit {
     const params = { email: this.form.get('email')?.value }
 
     this.userService
-      .findUser(<any>params)
+      .getUserDetailsUser(<any>params)
       .subscribe(
         this.login, e => {
           if (e.status != 404)

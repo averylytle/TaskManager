@@ -24,6 +24,101 @@ export class UserService extends BaseService {
   }
 
   /**
+   * Path part for operation findAllUsersUser
+   */
+  static readonly FindAllUsersUserPath = '/User';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllUsersUser$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllUsersUser$Plain$Response(params?: {
+  },
+  context?: HttpContext
+
+): Observable<StrictHttpResponse<Array<UserRm>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UserService.FindAllUsersUserPath, 'get');
+    if (params) {
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: 'text/plain',
+      context: context
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<UserRm>>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllUsersUser$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllUsersUser$Plain(params?: {
+  },
+  context?: HttpContext
+
+): Observable<Array<UserRm>> {
+
+    return this.findAllUsersUser$Plain$Response(params,context).pipe(
+      map((r: StrictHttpResponse<Array<UserRm>>) => r.body as Array<UserRm>)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllUsersUser()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllUsersUser$Response(params?: {
+  },
+  context?: HttpContext
+
+): Observable<StrictHttpResponse<Array<UserRm>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UserService.FindAllUsersUserPath, 'get');
+    if (params) {
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'text/json',
+      context: context
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<UserRm>>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllUsersUser$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllUsersUser(params?: {
+  },
+  context?: HttpContext
+
+): Observable<Array<UserRm>> {
+
+    return this.findAllUsersUser$Response(params,context).pipe(
+      map((r: StrictHttpResponse<Array<UserRm>>) => r.body as Array<UserRm>)
+    );
+  }
+
+  /**
    * Path part for operation registerUser
    */
   static readonly RegisterUserPath = '/User';
@@ -77,24 +172,24 @@ export class UserService extends BaseService {
   }
 
   /**
-   * Path part for operation findUser
+   * Path part for operation getUserDetailsUser
    */
-  static readonly FindUserPath = '/User/{email}';
+  static readonly GetUserDetailsUserPath = '/User/{email}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findUser$Plain()` instead.
+   * To access only the response body, use `getUserDetailsUser$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findUser$Plain$Response(params: {
+  getUserDetailsUser$Plain$Response(params: {
     email: string;
   },
   context?: HttpContext
 
 ): Observable<StrictHttpResponse<UserRm>> {
 
-    const rb = new RequestBuilder(this.rootUrl, UserService.FindUserPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, UserService.GetUserDetailsUserPath, 'get');
     if (params) {
       rb.path('email', params.email, {});
     }
@@ -113,36 +208,36 @@ export class UserService extends BaseService {
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findUser$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `getUserDetailsUser$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findUser$Plain(params: {
+  getUserDetailsUser$Plain(params: {
     email: string;
   },
   context?: HttpContext
 
 ): Observable<UserRm> {
 
-    return this.findUser$Plain$Response(params,context).pipe(
+    return this.getUserDetailsUser$Plain$Response(params,context).pipe(
       map((r: StrictHttpResponse<UserRm>) => r.body as UserRm)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findUser()` instead.
+   * To access only the response body, use `getUserDetailsUser()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findUser$Response(params: {
+  getUserDetailsUser$Response(params: {
     email: string;
   },
   context?: HttpContext
 
 ): Observable<StrictHttpResponse<UserRm>> {
 
-    const rb = new RequestBuilder(this.rootUrl, UserService.FindUserPath, 'get');
+    const rb = new RequestBuilder(this.rootUrl, UserService.GetUserDetailsUserPath, 'get');
     if (params) {
       rb.path('email', params.email, {});
     }
@@ -161,18 +256,18 @@ export class UserService extends BaseService {
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findUser$Response()` instead.
+   * To access the full response (for headers, for example), `getUserDetailsUser$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findUser(params: {
+  getUserDetailsUser(params: {
     email: string;
   },
   context?: HttpContext
 
 ): Observable<UserRm> {
 
-    return this.findUser$Response(params,context).pipe(
+    return this.getUserDetailsUser$Response(params,context).pipe(
       map((r: StrictHttpResponse<UserRm>) => r.body as UserRm)
     );
   }

@@ -94,7 +94,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   assignUser() {
-
+    this.router.navigate(['/assign-user-project'])
   }
 
   private handleError(err: any) {

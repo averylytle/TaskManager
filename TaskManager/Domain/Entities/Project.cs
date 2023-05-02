@@ -66,6 +66,10 @@ Users can be assigned to many projects.
 		{
 			var project = this;
 
+			var result = project.Users.FirstOrDefault(u => u.Email == user.Email);
+
+			bool res = project.Users.Contains(user);
+
 			if (project.Users.Contains(user))
 			{
 				return new DuplicateUserError();

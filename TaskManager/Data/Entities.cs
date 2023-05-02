@@ -20,10 +20,6 @@ namespace TaskManager.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			//setting the primary key for Tasks
-			//modelBuilder.Entity<Tasks>().HasKey(t => t.TaskId);
-
-			//modelBuilder.Entity<User>().HasKey(p => p.Email);
 
 			modelBuilder.Entity<Project>().HasKey(p => p.ProjectId);
 

@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ProjectService } from './../api/services/project.service';
 import { AuthService } from './../auth/auth.service';
 import { Router } from '@angular/router';
+import { ProjectDto } from '../api/models';
+
 
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
@@ -33,7 +35,8 @@ export class CreateProjectComponent implements OnInit {
       return;
 
     console.log(this.form.value)
-    this.projectService.createProjectProject({body: <any>this.form.value}).subscribe()
+    this.projectService.createProjectProject({ body: <any>this.form.value }).subscribe()
+    this.router.navigate(['/project'])
 
     /*this.taskService.addTaskTask({ body: <any>this.form.value }).subscribe()
     this.router.navigate(['/tasks'])*/

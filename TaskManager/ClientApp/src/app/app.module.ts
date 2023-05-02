@@ -11,6 +11,7 @@ import { TasksListComponent } from './tasks-list/tasks-list.component';
 import { AddTaskComponent } from './add-task/add-task.component';
 //dialog 
 import { MatDialogModule } from '@angular/material';
+import { MatSelectModule } from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
@@ -20,7 +21,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { LoginComponent } from './login/login.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { TestingDialogComponent } from './testing-dialog/testing-dialog.component';
-import { EditinplaceComponent } from './editinplace/editinplace.component';
+import { AssignUserProjectComponent } from './assign-user-project/assign-user-project.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import { EditinplaceComponent } from './editinplace/editinplace.component';
     LoginComponent,
     CreateProjectComponent,
     TestingDialogComponent,
-    EditinplaceComponent
+    AssignUserProjectComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -44,6 +45,7 @@ import { EditinplaceComponent } from './editinplace/editinplace.component';
     ReactiveFormsModule,
     MatDialogModule,
     BrowserAnimationsModule,
+    MatSelectModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'tasks', component: TasksListComponent },
@@ -52,14 +54,14 @@ import { EditinplaceComponent } from './editinplace/editinplace.component';
       { path: 'project', component: ProjectsComponent },
       { path: 'create-project', component: CreateProjectComponent },
       { path: 'login', component: LoginComponent },
-      { path: 'editinplace', component: EditinplaceComponent }
+      { path: 'assign-user-project', component: AssignUserProjectComponent }
 
     ])
   ],
   providers: [
     //TasksListComponent
   ],
-  bootstrap: [AppComponent],
-  entryComponents: [TestingDialogComponent]
+  bootstrap: [AppComponent]
+  //,entryComponents: [TestingDialogComponent]
 })
 export class AppModule { }
