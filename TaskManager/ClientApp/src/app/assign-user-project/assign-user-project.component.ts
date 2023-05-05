@@ -9,7 +9,7 @@ import { UserProjectService, UserService } from '../api/services';
 import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 
 import { catchError, finalize, of, Subscription } from 'rxjs';
-import { UserProjectDialogComponent } from '../dialog/error-dialogs/already-assigned/already-assigned-error.component';
+import { UserProjectDialogComponent } from '../dialog/user-project-dialog/user-project-dialog.component';
 
 
 @Component({

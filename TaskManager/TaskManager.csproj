@@ -21,13 +21,17 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\app\dialog\user-project-dialog\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\app\dialog\user-project-dialog\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\dialog\user-project-dialog\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\app\dialog\user-project-dialog\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\app\dialog\user-project-dialog\" />
+    <Folder Include="ClientApp\src\app\dialog\" />
     <Folder Include="ClientApp\src\app\id\" />
     <Folder Include="ClientApp\src\app\auth\" />
   </ItemGroup>

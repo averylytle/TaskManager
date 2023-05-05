@@ -4,9 +4,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 
 @Component({
-  selector: 'app-already-assigned-error',
-  templateUrl: './already-assigned-error.component.html',
-  styleUrls: ['./already-assigned-error.component.css']
+  selector: 'app-user-project-dialog',
+  templateUrl: './user-project-dialog.component.html',
+  styleUrls: ['./user-project-dialog.component.css']
 })
 export class UserProjectDialogComponent {
 
@@ -18,6 +18,5 @@ export class UserProjectDialogComponent {
   close() {
     this.dialogRef.close();
   }
+
 }
-
-

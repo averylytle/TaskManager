@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserProjectDialogComponent } from './already-assigned-error.component';
+import { UserProjectDialogComponent } from './user-project-dialog.component';
 
 describe('UserProjectDialogComponent', () => {
   let component: UserProjectDialogComponent;
