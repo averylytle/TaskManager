@@ -22,6 +22,8 @@ import { LoginComponent } from './login/login.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { TestingDialogComponent } from './testing-dialog/testing-dialog.component';
 import { AssignUserProjectComponent } from './assign-user-project/assign-user-project.component';
+import { UserProjectDialogComponent } from './dialog/error-dialogs/already-assigned-error/already-assigned-error.component';
+import { SuccessComponent } from './dialog/success/success.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { AssignUserProjectComponent } from './assign-user-project/assign-user-pr
     LoginComponent,
     CreateProjectComponent,
     TestingDialogComponent,
-    AssignUserProjectComponent
+    AssignUserProjectComponent,
+    UserProjectDialogComponent,
+    SuccessComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

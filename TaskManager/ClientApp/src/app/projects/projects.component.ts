@@ -51,7 +51,14 @@ export class ProjectsComponent implements OnInit {
       projectId => { return this.taskService.listTasksTask({ projectId: projectId[0] }) }
     )).subscribe(response => this.projectTaskList = response)
 
-   
+  }
+
+  
+
+
+  createProject() {
+    //this.router.navigate(['/create-project'])
+    this.openDialog();
   }
 
   openDialog() {
@@ -69,13 +76,13 @@ export class ProjectsComponent implements OnInit {
 
 
     const dialogRef = this.dialog.open(TestingDialogComponent, {
-      data: { title: "Hello, World!"}
-      });
+      data: { title: "Hello, World!" }
+    });
 
     dialogRef.afterClosed().subscribe(
-    result => console.log("Dialog Result", result)
+      result => console.log("Dialog Result", result)
     );
-    
+
 
     /*const dialogConfig = new MatDialogConfig();
 
@@ -85,12 +92,7 @@ export class ProjectsComponent implements OnInit {
 
     this.dialog.open(TestingDialogComponent, dialogConfig);
 */
-   
-  }
 
-
-  createProject() {
-    this.router.navigate(['/create-project'])
   }
 
   assignUser() {

@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\dialog\user-project-dialog\" />
     <Folder Include="ClientApp\src\app\id\" />
     <Folder Include="ClientApp\src\app\auth\" />
   </ItemGroup>
