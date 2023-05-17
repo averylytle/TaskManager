@@ -9,6 +9,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
+import { CompletedTaskDto } from '../models/completed-task-dto';
 import { TasksDto } from '../models/tasks-dto';
 import { TasksRm } from '../models/tasks-rm';
 
@@ -340,11 +341,10 @@ export class TaskService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `completeTask()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
   completeTask$Response(params?: {
-    projectId?: string;
-    taskId?: string;
+    body?: CompletedTaskDto
   },
   context?: HttpContext
 
@@ -352,8 +352,7 @@ export class TaskService extends BaseService {
 
     const rb = new RequestBuilder(this.rootUrl, TaskService.CompleteTaskPath, 'delete');
     if (params) {
-      rb.query('projectId', params.projectId, {});
-      rb.query('taskId', params.taskId, {});
+      rb.body(params.body, 'application/*+json');
     }
 
     return this.http.request(rb.build({
@@ -372,11 +371,10 @@ export class TaskService extends BaseService {
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `completeTask$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
   completeTask(params?: {
-    projectId?: string;
-    taskId?: string;
+    body?: CompletedTaskDto
   },
   context?: HttpContext
 

@@ -4,9 +4,10 @@ import { Time } from '@angular/common';
 import { TaskService } from './../api/services/task.service';
 import { CompletedTasksService } from './../api/services/completed-tasks.service';
 import { ProjectService } from './../api/services/project.service';
-import { TasksDto, TasksRm, ProjectTaskRm } from '../api/models';
+import { TasksDto, TasksRm, ProjectTaskRm, CompletedTaskDto } from '../api/models';
 import { AuthService } from './../auth/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { mergeMap } from 'rxjs';
 
 
 @Component({
@@ -54,8 +55,28 @@ export class TasksListComponent implements OnInit {
       .subscribe(response => this.projectIds = response, this.handleError)
 
 
-    this.completedService.listCompleteCompletedTasks({})
-      .subscribe(response => this.completedTasksList = response, this.handleError)
+    /*
+     *
+     * //it works!!
+     *
+     *const getProjectIds = this.projectService.getProjectIdsProject({ email: this.authService.currentUser?.email ?? '' });
+     * 
+    getProjectIds.pipe(mergeMap(
+      projectId => { return this.taskService.listTasksTask({ projectId: projectId[0] }) }
+    )).subscribe(response => this.projectTaskList = response)*/
+
+    const getProjectIds = this.projectService.getProjectIdsProject({ email: this.authService.currentUser?.email ?? '' });
+
+    getProjectIds.pipe(mergeMap(
+      projectId => {
+        return this.completedService
+          .listCompleteCompletedTasks({ projectId: projectId[0], email: this.authService.currentUser?.email ?? '' })
+      }
+    )).subscribe(response => this.completedTasksList = response);
+
+
+    /*this.completedService.listCompleteCompletedTasks({ projectId: this.projectIds[0], email: this.authService.currentUser?.email ?? '' })
+      .subscribe(response => { this.completedTasksList = response; console.log(this.projectIds[0]); this.handleError })*/
 
 
   }
@@ -70,17 +91,22 @@ export class TasksListComponent implements OnInit {
   }
 
   markComplete() {
-    /*const dto: TasksDto = {
-      taskId: this.tasksList[0].taskId
-    };*/
 
-
+    /*
+      completorEmail?: null | string;
+      projectId?: string;
+      taskId?: string;
+    */
 
     //why am I using a read model here? shouldn't it be a DTO?
-    const rm: TasksRm = {
+    const completedTaskDto: CompletedTaskDto = {
+      completorEmail: this.authService.currentUser?.email ?? '',
+      projectId: this.projectIds[0],
       taskId: this.tasksList[0].taskId
     }
-    this.taskService.completeTask({ taskId: rm.taskId, projectId: this.projectIds[0] })
+
+    //taskId: rm.taskId, projectId: this.projectIds[0] 
+    this.taskService.completeTask({ body: completedTaskDto})
       .subscribe(_ => { this.tasksList.filter(x => !x.selected) })
     this.tasksList = this.tasksList.filter(x => !x.selected);
 

@@ -1,3 +1,5 @@
+export { CompletedTaskDto } from './models/completed-task-dto';
+export { CompletedTasksRm } from './models/completed-tasks-rm';
 export { NewUserDto } from './models/new-user-dto';
 export { ProblemDetails } from './models/problem-details';
 export { Project } from './models/project';

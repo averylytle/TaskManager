@@ -12,6 +12,7 @@ namespace TaskManager.Data
 		public DbSet<Project> Projects => Set<Project>();
 		public DbSet<ProjectUser> ProjectUser => Set<ProjectUser>();
 		public DbSet<Tasks> Tasks => Set<Tasks>();
+		public DbSet<CompletedTask> CompletedTasks => Set<CompletedTask>();
 
 		public Entities(DbContextOptions<Entities> options) : base(options)
 		{

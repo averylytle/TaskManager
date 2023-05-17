@@ -1,13 +1,14 @@
 ﻿namespace TaskManager.ReadModels
 {
-	public record TasksRm(
+	public record CompletedTasksRm(
 		Guid TaskId,
 		string Name,
-		string Description,
+		string? Description,
 		string? AssignedFirstName,
 		string? AssignedLastName,
 		string? AssignedEmail,
-		string Priority
+		string? Priority,
+		string CompletorEmail,
+		DateTime CompletedDate
 		);
-
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.Data;
+using TaskManager.Dtos;
 using TaskManager.ReadModels;
 
 namespace TaskManager.Controllers
@@ -12,59 +13,130 @@ namespace TaskManager.Controllers
 		//needed for dependency injection
 		private readonly Entities _entities;
 
-		public CompletedTasksController(Entities entities) 
+		private readonly Guid guid = new Guid();
+
+		public CompletedTasksController(Entities entities)
 		{
 			_entities = entities;
 		}
 
+		//[Route("[controller]/{email:string?}")]
+		[HttpGet]//will always use a readmodel
 		[ProducesResponseType(400)]//client side error
 		[ProducesResponseType(500)]//server side error. database connection string failure 
-		[ProducesResponseType(typeof(IEnumerable<TasksRm>), 200)]
-		[HttpGet]//will always use a readmodel
-		public IEnumerable<TasksRm> ListComplete()
+		[ProducesResponseType(typeof(IEnumerable<CompletedTasksRm>), 200)]
+		public IEnumerable<CompletedTasksRm> ListComplete(Guid projectId, string email = "")
 		{
-			/*ar tasksRmList = _entities.Tasks.
-				Where(t => t.IsComplete == 1).
-				Select(task => new TasksRm(
-				task.TaskId,
-				task.Name,
-				task.Description,
-				task.AssignedFirstName,
-				task.AssignedLastName,
-				task.AssignedEmail,
-				task.Priority,
-				task.IsComplete));
-*/
-
-			var query = (from t in _entities.Tasks
-						 join u in _entities.Users
-						 on t.AssignedEmail equals u.Email
-						 where t.IsComplete == 1 // 0 works but why doesn't 1?
-						 select new
-						 {
-							 TaskId = t.TaskId,
-							 Name = t.Name,
-							 Description = t.Description,
-							 AssignedFirstName = u.FirstName,
-							 AssignedLastName = u.LastName,
-							 AssignedEmail = t.AssignedEmail,
-							 Priority = t.Priority,
-							 IsComplete = t.IsComplete
-						 }).ToList();
-
-
-			//Converting query to a TasksRm
-			List<TasksRm> tasksRm = new List<TasksRm>();
-
-			foreach (var task in query)
+			if(email == "")
 			{
-				tasksRm.Add(new TasksRm(
-					task.TaskId, task.Name, task.Description, task.AssignedFirstName, task.AssignedLastName, task.AssignedEmail,
-					task.Priority, task.IsComplete));
+				var query = (from t in _entities.CompletedTasks
+							 join u in _entities.Users
+							 on t.AssignedEmail equals u.Email
+							 where (t.Project.ProjectId == projectId)
+							 select new
+							 {
+								 t.TaskId,
+								 t.Name,
+								 t.Description,
+								 AssignedFirstName = u.FirstName,
+								 AssignedLastName = u.LastName,
+								 t.AssignedEmail,
+								 t.Priority,
+								 t.CompletorEmail,
+								 t.CompletedDate
+							 }).ToList();
+
+				//Converting query to a TasksRm
+				List<CompletedTasksRm> deletedTasksRm = new List<CompletedTasksRm>();
+
+				foreach (var task in query)
+				{
+					deletedTasksRm.Add(new CompletedTasksRm(
+						task.TaskId, task.Name, task.Description, task.AssignedFirstName, task.AssignedLastName, task.AssignedEmail,
+						task.Priority, task.CompletorEmail, task.CompletedDate));
+				}
+
+
+				return deletedTasksRm;
+
+			}
+			else
+			{
+				var query = (from t in _entities.CompletedTasks
+							 join u in _entities.Users
+							 on t.AssignedEmail equals u.Email
+							 where (t.Project.ProjectId == projectId) && (u.Email == email)
+							 select new
+							 {
+								 t.TaskId,
+								 t.Name,
+								 t.Description,
+								 AssignedFirstName = u.FirstName,
+								 AssignedLastName = u.LastName,
+								 t.AssignedEmail,
+								 t.Priority,
+								 t.CompletorEmail,
+								 t.CompletedDate
+							 }).ToList();
+
+				//Converting query to a TasksRm
+				List<CompletedTasksRm> deletedTasksRm = new List<CompletedTasksRm>();
+
+				foreach (var task in query)
+				{
+					deletedTasksRm.Add(new CompletedTasksRm(
+						task.TaskId, task.Name, task.Description, task.AssignedFirstName, task.AssignedLastName, task.AssignedEmail,
+						task.Priority, task.CompletorEmail, task.CompletedDate));
+				}
+
+
+				return deletedTasksRm;
+
 			}
 
 
-			return tasksRm;
 		}
+
+
+
+		[HttpGet("{email}")]//will always use a readmodel
+		[ProducesResponseType(400)]//client side error
+		[ProducesResponseType(500)]//server side error. database connection string failure 
+		[ProducesResponseType(typeof(IEnumerable<CompletedTasksRm>), 200)]
+		public IEnumerable<CompletedTasksRm> CompleteByEmail(string email)
+		{
+			var query = (from t in _entities.CompletedTasks
+						 join u in _entities.Users
+						 on t.AssignedEmail equals u.Email
+						 where (u.Email == email)
+						 select new
+						 {
+							 t.TaskId,
+							 t.Name,
+							 t.Description,
+							 AssignedFirstName = u.FirstName,
+							 AssignedLastName = u.LastName,
+							 t.AssignedEmail,
+							 t.Priority,
+							 t.CompletorEmail,
+							 t.CompletedDate
+						 }).ToList();
+
+			//Converting query to a TasksRm
+			List<CompletedTasksRm> deletedTasksRm = new List<CompletedTasksRm>();
+
+			foreach (var task in query)
+			{
+				deletedTasksRm.Add(new CompletedTasksRm(
+					task.TaskId, task.Name, task.Description, task.AssignedFirstName, task.AssignedLastName, task.AssignedEmail,
+					task.Priority, task.CompletorEmail, task.CompletedDate));
+			}
+
+
+			return deletedTasksRm;
+		}
+
+
 	}
 }
+

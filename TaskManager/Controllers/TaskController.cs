@@ -147,17 +147,16 @@ namespace TaskManager.Controllers
 				var query = (from t in _entities.Tasks
 								join u in _entities.Users
 								on t.AssignedEmail equals u.Email
-								where (t.IsComplete == 0) && (t.AssignedEmail == email)  //only return active tasks
+								where (t.AssignedEmail == email) 
 								select new
 								{
-									TaskId = t.TaskId,
-									Name = t.Name,
-									Description = t.Description,
+									t.TaskId,
+									t.Name,
+									t.Description,
 									AssignedFirstName = u.FirstName,
 									AssignedLastName = u.LastName,
-									AssignedEmail = t.AssignedEmail,
-									Priority = t.Priority,
-									IsComplete = t.IsComplete
+									t.AssignedEmail,
+									t.Priority
 								}).ToList();
 
 				//Converting query to a TasksRm
@@ -167,7 +166,7 @@ namespace TaskManager.Controllers
 				{
 					tasksRm.Add(new TasksRm(
 						task.TaskId, task.Name, task.Description, task.AssignedFirstName, task.AssignedLastName, task.AssignedEmail,
-						task.Priority, task.IsComplete));
+						task.Priority));
 				}
 
 				if (user == null)
@@ -208,7 +207,7 @@ namespace TaskManager.Controllers
 				var query = (from t in _entities.Tasks
 							 join u in _entities.Users
 							 on t.AssignedEmail equals u.Email
-							 where (t.IsComplete == 0) && (t.TaskId == taskId)  //only return active tasks
+							 where (t.TaskId == taskId)
 							 select new
 							 {
 								 t.TaskId,
@@ -217,8 +216,7 @@ namespace TaskManager.Controllers
 								 AssignedFirstName = u.FirstName,
 								 AssignedLastName = u.LastName,
 								 t.AssignedEmail,
-								 t.Priority,
-								 t.IsComplete
+								 t.Priority
 							 }).ToList();
 
 				//Converting query to a TasksRm
@@ -228,7 +226,7 @@ namespace TaskManager.Controllers
 				{
 					tasksRm.Add(new TasksRm(
 						task.TaskId, task.Name, task.Description, task.AssignedFirstName, task.AssignedLastName, task.AssignedEmail,
-						task.Priority, task.IsComplete));
+						task.Priority));
 				}
 
 				return Ok(tasksRm);
@@ -286,7 +284,6 @@ namespace TaskManager.Controllers
 				dto.Description ?? "",
 				dto.AssignedEmail ?? "",//keeping assigned email for ease of adding task on front-end
 				dto.Priority ?? "",
-				0,
 				project));
 
 				_entities.SaveChanges();
@@ -309,41 +306,55 @@ namespace TaskManager.Controllers
 		[ProducesResponseType(500)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public IActionResult Complete(Guid projectId, Guid taskId)//Guid taskId
+		public IActionResult Complete(CompletedTaskDto dto)//Guid projectId, Guid taskId
 		{
-
 			/*
-			 Now that tasks are in projects, I need to find the task in a project.
-			Do I need to find the project first? Probably
+			this deletes the task.
 
-			Can I find a project via a task Id? maybe if I pass a project Id and a taskId
+			I want to also store the deleted value in a CompletedTasks entity
+			What I want:
+			Everything a task has plus 
+			- who marked it complete
+			- when it was marked complete
+			 
 			 */
-			var project = _entities.Projects.Find(projectId);
+			var project = _entities.Projects.Find(dto.ProjectId);
 
 			if (project == null)
 			{
 				return NotFound();
 			}
 
-			var task = _entities.Tasks.Find(taskId);
+			var task = _entities.Tasks.Find(dto.TaskId);
 
-			//var task = _entities.Tasks.Find(dto.TaskId);
-			/*var task = _entities.Tasks.Find(taskId);*/
 
 			if (task == null)
 			{
 				return NotFound();
 			}
 
-			task.Complete();
-			//task.IsComplete = 1;
+
+			DateTime dateTime = DateTime.Now;
+
+			_entities.CompletedTasks.Add(new CompletedTask(
+				task.TaskId,
+				task.Name,
+				task.Description ?? "",
+				task.AssignedEmail ?? "",//keeping assigned email for ease of adding task on front-end
+				task.Priority ?? "",
+				project,
+				dto.CompletorEmail,
+				dateTime//setting the datetime to the time the delete request was made
+				));
+
+
+			_entities.Tasks.Where(p => p.TaskId == dto.TaskId).ExecuteDelete();
+
 
 			_entities.SaveChanges();
 
-			return Ok("Task Completed.");
-
-			/*//success call saying I deleted something and theres no content anymore
-			return NoContent();*/
+			//success call saying I deleted something and theres no content anymore
+			return NoContent();
 
 		}
 

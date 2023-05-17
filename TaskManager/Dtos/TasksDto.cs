@@ -6,11 +6,7 @@ namespace TaskManager.Dtos
 		[Required] Guid ProjectId,//required to assign a task to a project
 		[Required] Guid TaskId,
 		[Required] string Name,
-		//might need to change string length to accommodate description
 		[StringLength(1000)] string Description,
-		//DateTime DueDate,
-/*		string? AssignedFirstName,
-		string? AssignedLastName,*/
 		string? AssignedEmail,
 		string? Priority
 		);
