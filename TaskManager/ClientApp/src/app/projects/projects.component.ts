@@ -1,4 +1,14 @@
-import { Component, OnInit} from '@angular/core';
+/*
+
+Used as the admin page for Projects. Can view all projects and all users assigned to projects
+
+
+Eventually will have a project page showing the projects only one user creates. I'll need that on the backend.
+Like ProjectUser, but ProjectOwner
+
+*/
+
+import { Component, OnInit } from '@angular/core';
 import { ProjectService } from './../api/services/project.service';
 import { TaskService } from './../api/services/task.service';
 import { TasksDto, TasksRm, ProjectRm, ProjectTaskRm } from '../api/models';
@@ -42,14 +52,14 @@ export class ProjectsComponent implements OnInit {
 
 
     this.projectService.getProjectIdsProject({ email: this.authService.currentUser?.email ?? '' })
-      .subscribe(response => { this.projectIds = response; console.log("projectidscall", this.projectIds) }, this.handleError)
+      .subscribe(response => { this.projectIds = response; }, this.handleError)
 
     const getProjectIds = this.projectService.getProjectIdsProject({ email: this.authService.currentUser?.email ?? '' });
 
-    //it works!!
+    /*//it works!!
     getProjectIds.pipe(mergeMap(
       projectId => { return this.taskService.listTasksTask({ projectId: projectId[0] }) }
-    )).subscribe(response => this.projectTaskList = response)
+    )).subscribe(response => this.projectTaskList = response)*/
 
   }
 

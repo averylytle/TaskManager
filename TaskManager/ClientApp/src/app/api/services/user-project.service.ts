@@ -23,6 +23,107 @@ export class UserProjectService extends BaseService {
   }
 
   /**
+   * Path part for operation getProjectIdFromTaskIdUserProject
+   */
+  static readonly GetProjectIdFromTaskIdUserProjectPath = '/UserProject';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProjectIdFromTaskIdUserProject$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProjectIdFromTaskIdUserProject$Plain$Response(params?: {
+    taskId?: string;
+  },
+  context?: HttpContext
+
+): Observable<StrictHttpResponse<string>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UserProjectService.GetProjectIdFromTaskIdUserProjectPath, 'get');
+    if (params) {
+      rb.query('taskId', params.taskId, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: 'text/plain',
+      context: context
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<string>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getProjectIdFromTaskIdUserProject$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProjectIdFromTaskIdUserProject$Plain(params?: {
+    taskId?: string;
+  },
+  context?: HttpContext
+
+): Observable<string> {
+
+    return this.getProjectIdFromTaskIdUserProject$Plain$Response(params,context).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProjectIdFromTaskIdUserProject()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProjectIdFromTaskIdUserProject$Response(params?: {
+    taskId?: string;
+  },
+  context?: HttpContext
+
+): Observable<StrictHttpResponse<string>> {
+
+    const rb = new RequestBuilder(this.rootUrl, UserProjectService.GetProjectIdFromTaskIdUserProjectPath, 'get');
+    if (params) {
+      rb.query('taskId', params.taskId, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'text/json',
+      context: context
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<string>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getProjectIdFromTaskIdUserProject$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProjectIdFromTaskIdUserProject(params?: {
+    taskId?: string;
+  },
+  context?: HttpContext
+
+): Observable<string> {
+
+    return this.getProjectIdFromTaskIdUserProject$Response(params,context).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
+    );
+  }
+
+  /**
    * Path part for operation assignUserToProjectUserProject
    */
   static readonly AssignUserToProjectUserProjectPath = '/UserProject';

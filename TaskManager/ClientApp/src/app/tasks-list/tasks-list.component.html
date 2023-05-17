@@ -36,6 +36,7 @@
         <!--<th scope="col">Due Date</th>-->
         <th scope="col">Assigned</th>
         <th scope="col">Priority</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -47,6 +48,7 @@
         <!--        <td>{{task.dueDate | date}}</td>-->
         <td>{{task.assignedFirstName}} {{task.assignedLastName}}</td>
         <td>{{task.priority}}</td>
+        <td><a [routerLink]="['/edit-task',task.taskId]">Edit</a></td>
       </tr>
     </tbody>
   </table>

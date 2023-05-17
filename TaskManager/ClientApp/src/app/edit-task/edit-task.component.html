@@ -1,1 +1,90 @@
-<p>edit-task works!</p>
+<h2 style="text-align: center;">Edit Task</h2>
+<!--sets formGroup to the form property in add-task.component.ts-->
+<form [formGroup]="form" (ngSubmit)="editTask()">
+  <div *ngFor="let task of tasksList" class="container d-grid gap-3" style="max-width: 700px;">
+
+    <div class="form-floating">
+      <!--formControlName="email" binds to formGroup 'form'-->
+      <!--blur fires when an element loses focus-->
+      <input class="form-control" formControlName="name" placeholder="Task Name" type="text" />
+      <label for="name">{{task.name}}</label>
+      
+
+      <div class="invalid-feedback d-block"
+           *ngIf="form.controls.name.invalid && (form.controls.name.dirty || form.controls.name.touched)">
+        <div *ngIf="form.controls.name.errors">
+          A task name is required
+        </div>
+      </div>
+
+    </div>
+
+    <div class="form-floating">
+      <input formControlName="description" class="form-control" type="text" id="description" placeholder="Description" />
+      <label class="form-label" for="description">{{task.description}}</label>
+
+      <div class="invalid-feedback d-block"
+           *ngIf="form.controls.description.invalid && (form.controls.description.dirty || form.controls.description.touched)">
+        <div *ngIf="form.controls.description.errors">
+          A task description is required
+        </div>
+      </div>
+
+    </div>
+
+    <div class="d-grid gap-3">
+      <!--
+          <div class="form-floating">
+            <input formControlName="dueDate" class="form-control" id="dueDate" placeholder="Due Date" />
+            <label class="form-label" for="dueDate">Due Date</label>
+          </div>-->
+      <!--      <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Izaberite datum narudzbe"
+                   formControlName="deliveryDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>-->
+
+      <div class="form-floating">
+
+        <input formControlName="assignedEmail" class="form-control" type="text" id="firstName" placeholder="First Name" />
+        <label class="form-label" for="assignedEmail">{{task.assignedEmail}}</label>
+
+        <div class="invalid-feedback d-block"
+             *ngIf="form.controls.assignedEmail.invalid && (form.controls.assignedEmail.dirty || form.controls.assignedEmail.touched)">
+          <div *ngIf="form.controls.assignedEmail.errors">
+            An email is required
+          </div>
+        </div>
+
+
+      </div>
+
+
+
+
+
+      <div class="form-floating">
+        <input formControlName="priority" placeholder="Priority" class="form-control" id="priority" type="text" />
+        <label class="form-label" for="priority">{{task.priority}}</label>
+
+        <div class="invalid-feedback d-block"
+             *ngIf="form.controls.priority.invalid && (form.controls.priority.dirty || form.controls.priority.touched)">
+          <div *ngIf="form.controls.priority.errors">
+            A priority is required
+          </div>
+        </div>
+
+
+      </div>
+
+
+    </div>
+    <div class="d-flex justify-content-center center">
+      <!--(click)="addTask()"-->
+      <button type="submit" class="btn btn-primary">Submit <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+    </div>
+  </div>
+  
+</form>
+

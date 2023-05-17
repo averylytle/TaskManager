@@ -253,6 +253,40 @@ namespace TaskManager.Controllers
 		}
 
 
+		/*
+		 
+			Putting this here for now although it isn't a perfect fit. Might create a new controller for ids only 
+		 
+		 */
+		[HttpGet]
+		[ProducesResponseType(400)]//client side error
+		[ProducesResponseType(500)]//server side error. database connection string failure 
+		[ProducesResponseType(typeof(Guid), 200)]
+		public Guid GetProjectIdFromTaskId(Guid taskId)
+		{
+
+			var projectIdEnum = (from p in _entities.Tasks
+							 where p.TaskId == taskId
+							 select new
+							 {
+								 p.Project.ProjectId
+							 }
+							 ).ToList();
+
+			
+
+			IList<Guid> results = new List<Guid>();
+
+			foreach (var item in projectIdEnum)
+			{
+				results.Add(item.ProjectId);
+			}
+
+			//there is only one result 
+			return results[0];
+
+		}
+
 
 	}
 }

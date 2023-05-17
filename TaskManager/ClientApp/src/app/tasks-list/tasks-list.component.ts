@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Time } from '@angular/common';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { TaskService } from './../api/services/task.service';
 import { CompletedTasksService } from './../api/services/completed-tasks.service';
 import { ProjectService } from './../api/services/project.service';
@@ -31,6 +31,7 @@ export class TasksListComponent implements OnInit {
     private taskService: TaskService,
     private completedService: CompletedTasksService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private authService: AuthService
   ) {  }
 
@@ -55,10 +56,17 @@ export class TasksListComponent implements OnInit {
 
     this.completedService.listCompleteCompletedTasks({})
       .subscribe(response => this.completedTasksList = response, this.handleError)
+
+
   }
+
+
 
    addTask(){
     this.router.navigate(['/add-task'])
+  }
+  editTask() {
+    this.router.navigate(['/edit-task'])
   }
 
   markComplete() {
@@ -73,8 +81,12 @@ export class TasksListComponent implements OnInit {
       taskId: this.tasksList[0].taskId
     }
     this.taskService.completeTask({ taskId: rm.taskId, projectId: this.projectIds[0] })
-      .subscribe(_ => this.tasksList)
+      .subscribe(_ => { this.tasksList.filter(x => !x.selected) })
     this.tasksList = this.tasksList.filter(x => !x.selected);
+
+    //can't figure out how to have the task show up immediately in the completed tasks section.
+    //maybe has to do with needing to update the subscription?
+
   }
 
 /*  onCheckboxChange(e) {

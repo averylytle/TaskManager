@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+//import { AuthGuard } from './auth/auth.guard';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -13,6 +14,8 @@ import { AddTaskComponent } from './add-task/add-task.component';
 import { MatDialogModule } from '@angular/material';
 import { MatSelectModule } from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+//menu drop down for project
+import { MatMenuModule } from '@angular/material/menu';
 
 
 import { RegisterUserComponent } from './register-user/register-user.component';
@@ -23,6 +26,7 @@ import { CreateProjectComponent } from './create-project/create-project.componen
 import { TestingDialogComponent } from './testing-dialog/testing-dialog.component';
 import { AssignUserProjectComponent } from './assign-user-project/assign-user-project.component';
 import { UserProjectDialogComponent } from './dialog/user-project-dialog/user-project-dialog.component';
+import { ProjectUserComponent } from './project-user/project-user.component';
 
 
 @NgModule({
@@ -39,7 +43,8 @@ import { UserProjectDialogComponent } from './dialog/user-project-dialog/user-pr
     CreateProjectComponent,
     TestingDialogComponent,
     AssignUserProjectComponent,
-    UserProjectDialogComponent
+    UserProjectDialogComponent,
+    ProjectUserComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -49,15 +54,18 @@ import { UserProjectDialogComponent } from './dialog/user-project-dialog/user-pr
     MatDialogModule,
     BrowserAnimationsModule,
     MatSelectModule,
+    MatMenuModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'tasks', component: TasksListComponent },
       { path: 'add-task', component: AddTaskComponent },
       { path: 'register-user', component: RegisterUserComponent },
-      { path: 'project', component: ProjectsComponent },
+      { path: 'project-admin', component: ProjectsComponent },
+      { path: 'project-user', component: ProjectUserComponent },
       { path: 'create-project', component: CreateProjectComponent },
       { path: 'login', component: LoginComponent },
-      { path: 'assign-user-project', component: AssignUserProjectComponent }
+      { path: 'assign-user-project', component: AssignUserProjectComponent },
+      { path: 'edit-task/:taskId', component: EditTaskComponent }//, canActivate: [AuthGuard]
 
     ])
   ],

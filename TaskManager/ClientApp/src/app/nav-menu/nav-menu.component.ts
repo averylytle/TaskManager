@@ -1,4 +1,6 @@
+import { MatMenuModule } from '@angular/material/menu';
 import { Component } from '@angular/core';
+import { AssignUserProjectComponent } from '../assign-user-project/assign-user-project.component';
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,6 +9,10 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
   isExpanded = false;
+
+
+  constructor(
+  ) { }
 
   collapse() {
     this.isExpanded = false;

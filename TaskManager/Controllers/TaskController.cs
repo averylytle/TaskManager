@@ -57,7 +57,11 @@ namespace TaskManager.Controllers
 		}*/
 
 
-		[HttpGet]
+
+
+		//commented out because I need this HttpGet for get task by id. 
+		//for now I don't think I need a get all tasks by project. I do that in the Project controller?
+		/*[HttpGet]
 		[ProducesResponseType(500)]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
@@ -118,7 +122,7 @@ namespace TaskManager.Controllers
 
 			return Ok(projectTasksRm);
 
-		}
+		}*/
 
 
 
@@ -186,6 +190,56 @@ namespace TaskManager.Controllers
 		}
 
 
+		/*
+		 Retrieve a single task by taskId. Used to edit a single task on the front end
+		 */
+		[HttpGet]
+		[ProducesResponseType(500)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		[ProducesResponseType(typeof(IEnumerable<TasksRm>), 200)]
+		//List all tasks related to a project based on user email
+		public ActionResult<IEnumerable<TasksRm>> GetTaskById (Guid taskId)
+		{
+			try
+			{
+				//var task = _entities.Tasks.FirstOrDefault(t => t.TaskId == taskId);
+
+				var query = (from t in _entities.Tasks
+							 join u in _entities.Users
+							 on t.AssignedEmail equals u.Email
+							 where (t.IsComplete == 0) && (t.TaskId == taskId)  //only return active tasks
+							 select new
+							 {
+								 t.TaskId,
+								 t.Name,
+								 t.Description,
+								 AssignedFirstName = u.FirstName,
+								 AssignedLastName = u.LastName,
+								 t.AssignedEmail,
+								 t.Priority,
+								 t.IsComplete
+							 }).ToList();
+
+				//Converting query to a TasksRm
+				List<TasksRm> tasksRm = new List<TasksRm>();
+
+				foreach (var task in query)
+				{
+					tasksRm.Add(new TasksRm(
+						task.TaskId, task.Name, task.Description, task.AssignedFirstName, task.AssignedLastName, task.AssignedEmail,
+						task.Priority, task.IsComplete));
+				}
+
+				return Ok(tasksRm);
+
+			}
+			catch (ArgumentNullException ex)
+			{
+				return NotFound(ex.Message);
+			}
+
+		}
 
 
 

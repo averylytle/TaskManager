@@ -6,8 +6,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TasksListComponent } from '../tasks-list/tasks-list.component';
 import { Project } from '../api/models';
-/*import { Guid } from 'guid-typescript';
-import { isStringObject } from 'util/types';*/
 
 
 @Component({
@@ -70,13 +68,11 @@ export class AddTaskComponent implements OnInit {
     if (this.form.invalid)
       return;
 
-    //testing getting the projectId
-    //this.form.get('projectId')
     this.form.patchValue({projectId: this.projectIds[0]})
 
-    //console.log("Form values:", this.form.value);
-    this.taskService.addTaskTask({ body: <any>this.form.value }).subscribe()
-    this.router.navigate(['/tasks'])
+    this.taskService.addTaskTask({ body: <any>this.form.value })
+      .subscribe(_ => this.router.navigate(['/tasks']));
+
   }
 
 }
