@@ -18,6 +18,7 @@ import { mergeMap } from 'rxjs/operators';
 
 import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { TestingDialogComponent } from '../testing-dialog/testing-dialog.component';
+import { ProjectTaskService } from '../api/services';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class ProjectsComponent implements OnInit {
     private router: Router,
     private taskService: TaskService,
     private authService: AuthService,
+    private projectTaskService: ProjectTaskService,
     private dialog: MatDialog  ) { }
 
   ngOnInit(): void {
@@ -56,10 +58,10 @@ export class ProjectsComponent implements OnInit {
 
     const getProjectIds = this.projectService.getProjectIdsProject({ email: this.authService.currentUser?.email ?? '' });
 
-    /*//it works!!
+    //it works!!
     getProjectIds.pipe(mergeMap(
-      projectId => { return this.taskService.listTasksTask({ projectId: projectId[0] }) }
-    )).subscribe(response => this.projectTaskList = response)*/
+      projectId => { return this.projectTaskService.listTasksByProjectProjectTask({ projectId: projectId[0] }) }
+    )).subscribe(response => this.projectTaskList = response)
 
   }
 

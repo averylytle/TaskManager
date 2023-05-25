@@ -30,26 +30,33 @@
             <a class="nav-link text-dark" [routerLink]="['/project-admin']">Project Admin</a>
           </li>
 
-          <!--<li class="nav-item" [routerLinkActive]="['link-active']">
+          <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/project-user']">Project</a>
           </li>
--->
-
-
+          <!---->
           <!--I want to do a for loop to show the projects available(implement a dropdown search) that will populate the buttons
 
-            When a button is clicked, it'll send the projectId
+  When a button is clicked, it'll send the projectId
+  *ngFor="let pt of projectTaskList"
 
+
+            still doesn't work even with ng-container. makes the drop down empty'
             -->
-          <li>
-            <!-- #docregion mat-menu-trigger-for -->
-            <button mat-button [matMenuTriggerFor]="menu">Project</button>
-            <!-- #enddocregion mat-menu-trigger-for -->
-            <mat-menu #menu="matMenu" >
-              <button mat-menu-item class="nav-link text-dark" [routerLink]="['/project-user']">Name of the individual projects</button>
-              <button mat-menu-item>Item 2</button>
+          <!--<li>-->
+            <!--#docregion mat-menu-trigger-for -->
+            <!--<button mat-button [matMenuTriggerFor]="menu">Project</button>-->
+            <!--#enddocregion mat-menu-trigger-for -->
+            <!--<mat-menu #menu="matMenu">
+              <ng-container *ngFor="let pt of projectTaskList">
+                {{pt.projectName}}
+              </ng-container>
             </mat-menu>
-          </li>
+          </li>-->
+
+
+          <!--
+  <button mat-menu-item class="nav-link text-dark" [routerLink]="['/project-user']">{{pt.projectName}}</button>
+  <button mat-menu-item>Item 2</button>-->
 
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/tasks']">My Tasks</a>

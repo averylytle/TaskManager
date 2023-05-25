@@ -1,0 +1,5 @@
+input::placeholder {
+  color: #263238; /*Bootstrap's main text color*/
+  font-weight: normal;
+  text-align: left;
+}

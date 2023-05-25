@@ -40,9 +40,7 @@ export class AssignUserProjectComponent implements OnInit {
     constructor(
       private projectService: ProjectService,
       private userProjectService: UserProjectService,
-      private userService: UserService,
       private fb: FormBuilder,
-      private router: Router,
       private dialog: MatDialog
   ) { }
 
@@ -54,7 +52,7 @@ export class AssignUserProjectComponent implements OnInit {
   })
 
   ngOnInit(): void {
-    //getting the projects for dropdown menue
+    //getting the projects for dropdown menu
     this.projectService.getProjectsProject({})
       .subscribe(response => this.projectList = response, this.handleError)
 

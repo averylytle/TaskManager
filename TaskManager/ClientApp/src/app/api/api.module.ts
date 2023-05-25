@@ -6,6 +6,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { CompletedTasksService } from './services/completed-tasks.service';
 import { ProjectService } from './services/project.service';
+import { ProjectTaskService } from './services/project-task.service';
 import { TaskService } from './services/task.service';
 import { UserService } from './services/user.service';
 import { UserProjectService } from './services/user-project.service';
@@ -21,6 +22,7 @@ import { UserTaskService } from './services/user-task.service';
   providers: [
     CompletedTasksService,
     ProjectService,
+    ProjectTaskService,
     TaskService,
     UserService,
     UserProjectService,

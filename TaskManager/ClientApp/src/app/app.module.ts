@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 //menu drop down for project
 import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 import { RegisterUserComponent } from './register-user/register-user.component';
@@ -55,6 +56,7 @@ import { ProjectUserComponent } from './project-user/project-user.component';
     BrowserAnimationsModule,
     MatSelectModule,
     MatMenuModule,
+    MatCheckboxModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'tasks', component: TasksListComponent },

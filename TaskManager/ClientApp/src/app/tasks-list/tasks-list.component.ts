@@ -115,32 +115,6 @@ export class TasksListComponent implements OnInit {
 
   }
 
-/*  onCheckboxChange(e) {
-    if (e.target.checked) {
-
-    }
-  }*/
-
-/*  deleteTask(task: TasksDto) {
-    const dto: TasksDto = {
-      taskId: task.taskId
-    };
-
-    this.taskService.deleteTask({ taskId: dto.taskId })
-      .subscribe(_ => this.tasksList)
-  }*/
-
-
-/*  switchClicked(event) {
-    console.log(event.srcElement.checked);
-  }*/
-
-
-  /*  searchTasks() {
-      this.taskService.searchTask({})
-        .subscribe(response => this.tasksList = response, this.handleError)
-    }*/
-
   private handleError(err: any) {
     console.log("Response Error. Status: ", err.status)
     console.log("Response Error. Status Text: ", err.statusText)

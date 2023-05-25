@@ -55,6 +55,7 @@ export class RegisterUserComponent implements OnInit {
 
   }
 
+  //this will always bring you to tasks. I want to fix this to eventually have a login page where you can't view anything else until you login'
   private login = () => {
     this.authService.loginUser({ email: this.form.get('email')?.value })
     this.router.navigate(['/tasks'])

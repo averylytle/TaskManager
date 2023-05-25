@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TaskService, UserProjectService } from '../api/services';
+import { ProjectTaskService, TaskService} from '../api/services';
 import { TasksRm, TasksDto, ProjectRm } from '../api/models';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -15,8 +15,10 @@ export class EditTaskComponent implements OnInit {
               private router: Router,
               private fb: FormBuilder,
               private taskService: TaskService,
-              private userProject: UserProjectService
+              private projectTaskService: ProjectTaskService
                 ) { }
+
+  
 
   taskId: string = 'not loaded'
 
@@ -45,7 +47,7 @@ export class EditTaskComponent implements OnInit {
     this.route.paramMap
       .subscribe(p => this.findTask(p.get("taskId")))
 
-    this.userProject.getProjectIdFromTaskIdUserProject({ taskId: this.taskId })
+    this.projectTaskService.getProjectIdFromTaskIdProjectTask({ taskId: this.taskId })
       .subscribe(response => { this.projectId = response; });
   }
 

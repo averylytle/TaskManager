@@ -252,41 +252,41 @@ namespace TaskManager.Controllers
 			return Ok(usersRm);
 		}
 
-
-		/*
-		 
-			Putting this here for now although it isn't a perfect fit. Might create a new controller for ids only 
-		 
-		 */
+		//get all projects a user is assigned to
+		//used on the main 'Projects' link
 		[HttpGet]
-		[ProducesResponseType(400)]//client side error
-		[ProducesResponseType(500)]//server side error. database connection string failure 
-		[ProducesResponseType(typeof(Guid), 200)]
-		public Guid GetProjectIdFromTaskId(Guid taskId)
+		[ProducesResponseType(500)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(typeof(IEnumerable<ProjectRm>), 200)]
+		public ActionResult<IEnumerable<ProjectRm>> GetProjectByEmail(string email)
 		{
+			var query = (from p in _entities.Projects
+						 join pu in _entities.ProjectUser
+						 on p.ProjectId equals pu.Project.ProjectId
+						 where pu.User.Email == email
+						 select new
+						 {
+							 p.ProjectName,
+							 p.ProjectId
+						 }
+						 ).ToList();
 
-			var projectIdEnum = (from p in _entities.Tasks
-							 where p.TaskId == taskId
-							 select new
-							 {
-								 p.Project.ProjectId
-							 }
-							 ).ToList();
+			List<ProjectRm> projectRms = new List<ProjectRm>();
 
-			
-
-			IList<Guid> results = new List<Guid>();
-
-			foreach (var item in projectIdEnum)
+			foreach(var project in query)
 			{
-				results.Add(item.ProjectId);
+				projectRms.Add(new ProjectRm(
+					project.ProjectId,
+					project.ProjectName,
+					"",
+					null,
+					null
+					));
 			}
 
-			//there is only one result 
-			return results[0];
 
+			return Ok(projectRms);
 		}
-
 
 	}
 }
